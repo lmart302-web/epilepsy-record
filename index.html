@@ -13,41 +13,47 @@
 
 <div class="app">
 
-    <header class="page-header">
-        <h1>발작 기록</h1>
+    <!-- 헤더 -->
+    <header class="home-header">
+
+        <div>
+            <p class="home-label">오늘의 기록</p>
+            <h1>발작 기록</h1>
+        </div>
+
+        <span
+            class="home-date"
+            id="todayDate"
+        >
+            9월 29일
+        </span>
+
     </header>
 
 
     <main>
 
-        <!-- 오늘 -->
-        <section class="today-section">
+        <!-- 오늘 현황 -->
+        <section class="today-card">
 
-            <div class="section-title">
+            <div class="today-card-header">
 
                 <div>
-
-                    <span
-                        class="section-date"
-                        id="todayDate"
-                    >
-                        9월 29일
-                    </span>
+                    <span class="today-card-label">오늘</span>
 
                     <h2 id="todayMonth">
                         2026년 9월
                     </h2>
-
                 </div>
 
             </div>
 
 
-            <div class="summary-card">
+            <div class="summary-grid">
 
                 <div class="summary-item">
 
-                    <span>발작 횟수</span>
+                    <span>발작</span>
 
                     <strong id="todayCount">
                         0회
@@ -82,14 +88,34 @@
         </section>
 
 
-        <!-- 기록하기 -->
-        <section class="record-button-section">
+        <!-- 발작 기록하기 -->
+        <section class="record-start-section">
 
             <button
                 class="record-main-button"
                 onclick="location.href='record.html'"
             >
-                + 발작 기록하기
+
+                <span class="record-main-icon">
+                    +
+                </span>
+
+                <span class="record-main-text">
+
+                    <strong>
+                        발작 기록하기
+                    </strong>
+
+                    <small>
+                        발작이 시작되면 바로 눌러주세요
+                    </small>
+
+                </span>
+
+                <span class="record-main-arrow">
+                    →
+                </span>
+
             </button>
 
         </section>
@@ -98,9 +124,17 @@
         <!-- 최근 기록 -->
         <section class="recent-section">
 
-            <div class="section-heading">
+            <div class="section-header">
 
-                <h2>최근 기록</h2>
+                <div>
+                    <span class="section-label">
+                        최근 기록
+                    </span>
+
+                    <h2>
+                        최근 발작
+                    </h2>
+                </div>
 
                 <button
                     class="report-link"
@@ -126,12 +160,22 @@
         <!-- 안내 -->
         <section class="notice">
 
-            <strong>기록 안내</strong>
+            <div class="notice-icon">
+                i
+            </div>
 
-            <p>
-                발작이 시작되면 기록을 시작하고,
-                종료 후 관찰된 내용을 체크해 주세요.
-            </p>
+            <div>
+
+                <strong>
+                    기록 방법
+                </strong>
+
+                <p>
+                    발작이 시작되면 기록을 시작하고,
+                    종료 후 관찰된 내용을 선택해 주세요.
+                </p>
+
+            </div>
 
         </section>
 
@@ -154,9 +198,15 @@
 
         <div class="record-modal-header">
 
-            <h2 id="modalTitle">
-                발작 기록
-            </h2>
+            <div>
+                <span class="modal-label">
+                    기록 상세
+                </span>
+
+                <h2 id="modalTitle">
+                    발작 기록
+                </h2>
+            </div>
 
             <button
                 id="closeModal"
@@ -202,10 +252,11 @@
             class="modal-edit"
         >
 
-            <!-- 발작 유형 -->
             <div class="edit-section">
 
-                <h3>발작 유형</h3>
+                <h3>
+                    발작 유형
+                </h3>
 
                 <div
                     class="edit-choice-grid"
@@ -252,10 +303,11 @@
             </div>
 
 
-            <!-- 관찰 사항 -->
             <div class="edit-section">
 
-                <h3>관찰 사항</h3>
+                <h3>
+                    관찰 사항
+                </h3>
 
                 <div
                     class="edit-choice-grid"
@@ -302,10 +354,11 @@
             </div>
 
 
-            <!-- 발작 후 상태 -->
             <div class="edit-section">
 
-                <h3>발작 후 상태</h3>
+                <h3>
+                    발작 후 상태
+                </h3>
 
                 <div
                     class="edit-choice-grid"
@@ -345,10 +398,11 @@
             </div>
 
 
-            <!-- 메모 -->
             <div class="edit-section">
 
-                <h3>메모</h3>
+                <h3>
+                    메모
+                </h3>
 
                 <textarea
                     id="editMemo"
@@ -401,19 +455,16 @@ import { db } from "./js/firebase.js";
 
 
 let selectedRecordId = null;
-
 let selectedRecordData = null;
 
 let editType = "";
-
 let editObservations = [];
-
 let editAfter = "";
 
 
-/* --------------------------------
-   시간 표시
--------------------------------- */
+/* ================================
+   공통
+================================ */
 
 function formatDuration(seconds) {
 
@@ -421,46 +472,31 @@ function formatDuration(seconds) {
         return "0초";
     }
 
-
     const minutes =
         Math.floor(seconds / 60);
 
-
     const remainSeconds =
         seconds % 60;
-
 
     if (minutes === 0) {
         return `${remainSeconds}초`;
     }
 
-
     if (remainSeconds === 0) {
         return `${minutes}분`;
     }
 
-
     return `${minutes}분 ${remainSeconds}초`;
-
 }
 
-
-/* --------------------------------
-   날짜 표시
--------------------------------- */
 
 function formatDate(date) {
 
-    return `${date.getFullYear()}년
-            ${date.getMonth() + 1}월
-            ${date.getDate()}일`;
-
+    return `${date.getFullYear()}년 ${
+        date.getMonth() + 1
+    }월 ${date.getDate()}일`;
 }
 
-
-/* --------------------------------
-   시간 표시
--------------------------------- */
 
 function formatTime(date) {
 
@@ -471,59 +507,50 @@ function formatTime(date) {
             minute: "2-digit"
         }
     );
-
 }
 
 
-/* --------------------------------
+/* ================================
    오늘 날짜
--------------------------------- */
+================================ */
 
 function updateTodayDate() {
 
-    const today =
-        new Date();
-
+    const today = new Date();
 
     document.getElementById(
         "todayDate"
     ).textContent =
         `${today.getMonth() + 1}월 ${today.getDate()}일`;
 
-
     document.getElementById(
         "todayMonth"
     ).textContent =
-        `${today.getFullYear()}년 ${today.getMonth() + 1}월`;
-
+        `${today.getFullYear()}년 ${
+            today.getMonth() + 1
+        }월`;
 }
 
 
-/* --------------------------------
+/* ================================
    오늘 기록
--------------------------------- */
+================================ */
 
 async function loadTodayRecords() {
 
-    const today =
-        new Date();
+    const today = new Date();
 
+    const todayStart = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+    );
 
-    const todayStart =
-        new Date(
-            today.getFullYear(),
-            today.getMonth(),
-            today.getDate()
-        );
-
-
-    const tomorrowStart =
-        new Date(
-            today.getFullYear(),
-            today.getMonth(),
-            today.getDate() + 1
-        );
-
+    const tomorrowStart = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate() + 1
+    );
 
     try {
 
@@ -553,48 +580,35 @@ async function loadTodayRecords() {
 
         );
 
-
         const snapshot =
             await getDocs(q);
 
-
         let totalDuration = 0;
-
         let longestDuration = 0;
-
 
         snapshot.forEach((item) => {
 
-            const data =
-                item.data();
-
+            const data = item.data();
 
             const duration =
                 data.duration || 0;
 
-
-            totalDuration +=
-                duration;
-
+            totalDuration += duration;
 
             if (
                 duration >
                 longestDuration
             ) {
-
                 longestDuration =
                     duration;
-
             }
 
         });
-
 
         document.getElementById(
             "todayCount"
         ).textContent =
             `${snapshot.size}회`;
-
 
         document.getElementById(
             "todayTotal"
@@ -603,14 +617,12 @@ async function loadTodayRecords() {
                 totalDuration
             );
 
-
         document.getElementById(
             "todayLongest"
         ).textContent =
             formatDuration(
                 longestDuration
             );
-
 
     } catch (error) {
 
@@ -620,13 +632,12 @@ async function loadTodayRecords() {
         );
 
     }
-
 }
 
 
-/* --------------------------------
+/* ================================
    최근 기록
--------------------------------- */
+================================ */
 
 async function loadRecentRecords() {
 
@@ -634,7 +645,6 @@ async function loadRecentRecords() {
         document.getElementById(
             "recentRecords"
         );
-
 
     try {
 
@@ -654,79 +664,67 @@ async function loadRecentRecords() {
 
         );
 
-
         const snapshot =
             await getDocs(q);
 
-
         container.innerHTML = "";
-
 
         if (snapshot.empty) {
 
             container.innerHTML = `
-
                 <div class="empty-state">
-                    아직 기록이 없습니다.
+                    아직 기록된 발작이 없습니다.
                 </div>
-
             `;
 
             return;
-
         }
-
 
         snapshot.forEach((item) => {
 
-            const data =
-                item.data();
-
+            const data = item.data();
 
             const start =
                 data.startedAt.toDate();
-
 
             const record =
                 document.createElement(
                     "button"
                 );
 
-
             record.className =
                 "recent-record";
 
-
             record.innerHTML = `
 
-                <div class="recent-record-left">
+                <div class="recent-record-time">
 
                     <strong>
-                        ${start.getMonth() + 1}월
-                        ${start.getDate()}일
+                        ${formatTime(start)}
                     </strong>
 
                     <span>
-                        ${formatTime(start)}
+                        ${start.getMonth() + 1}월
+                        ${start.getDate()}일
                     </span>
 
                 </div>
 
 
-                <div class="recent-record-middle">
+                <div class="recent-record-info">
 
                     <strong>
                         ${data.type || "기록 없음"}
                     </strong>
 
                     <span>
-                        ${data.after || ""}
+                        ${data.after || "발작 후 상태 미기록"}
                     </span>
 
                 </div>
 
 
-                <div class="recent-record-right">
+                <div class="recent-record-duration">
 
                     <strong>
                         ${formatDuration(
@@ -734,32 +732,29 @@ async function loadRecentRecords() {
                         )}
                     </strong>
 
-                    <span>›</span>
+                    <span>
+                        ›
+                    </span>
 
                 </div>
 
             `;
 
-
             record.addEventListener(
                 "click",
                 () => {
-
                     openRecordModal(
                         item.id,
                         data
                     );
-
                 }
             );
-
 
             container.appendChild(
                 record
             );
 
         });
-
 
     } catch (error) {
 
@@ -768,84 +763,62 @@ async function loadRecentRecords() {
             error
         );
 
-
         container.innerHTML = `
-
             <div class="empty-state">
                 기록을 불러오지 못했습니다.
             </div>
-
         `;
-
     }
-
 }
 
 
-/* --------------------------------
+/* ================================
    상세 모달
--------------------------------- */
+================================ */
 
-function openRecordModal(
-    id,
-    data
-) {
+function openRecordModal(id, data) {
 
-    selectedRecordId =
-        id;
-
-
-    selectedRecordData =
-        data;
-
+    selectedRecordId = id;
+    selectedRecordData = data;
 
     const start =
         data.startedAt.toDate();
-
 
     const end =
         data.endedAt
             ? data.endedAt.toDate()
             : null;
 
-
     const observations =
-        Array.isArray(
-            data.observations
-        )
+        Array.isArray(data.observations)
             ? data.observations.join(", ")
             : "-";
-
 
     document.getElementById(
         "modalTitle"
     ).textContent =
         "발작 기록";
 
-
     document.getElementById(
         "modalView"
     ).style.display =
         "block";
-
 
     document.getElementById(
         "modalEdit"
     ).style.display =
         "none";
 
-
     const modalBody =
         document.getElementById(
             "modalBody"
         );
 
-
     modalBody.innerHTML = `
 
         <div class="modal-info">
 
-            <div>
+            <div class="modal-info-row">
 
                 <span>
                     발생 시간
@@ -859,7 +832,7 @@ function openRecordModal(
             </div>
 
 
-            <div>
+            <div class="modal-info-row">
 
                 <span>
                     종료 시간
@@ -876,7 +849,7 @@ function openRecordModal(
             </div>
 
 
-            <div>
+            <div class="modal-info-row highlight">
 
                 <span>
                     지속시간
@@ -891,7 +864,7 @@ function openRecordModal(
             </div>
 
 
-            <div>
+            <div class="modal-info-row">
 
                 <span>
                     발작 유형
@@ -904,7 +877,7 @@ function openRecordModal(
             </div>
 
 
-            <div>
+            <div class="modal-info-row">
 
                 <span>
                     관찰 사항
@@ -917,7 +890,7 @@ function openRecordModal(
             </div>
 
 
-            <div>
+            <div class="modal-info-row">
 
                 <span>
                     발작 후 상태
@@ -933,7 +906,7 @@ function openRecordModal(
             ${
                 data.memo
                     ? `
-                    <div>
+                    <div class="modal-info-row">
 
                         <span>
                             메모
@@ -952,7 +925,6 @@ function openRecordModal(
 
     `;
 
-
     document
         .getElementById(
             "recordModal"
@@ -960,26 +932,21 @@ function openRecordModal(
         .classList.add(
             "show"
         );
-
 }
 
 
-/* --------------------------------
-   수정 화면 열기
--------------------------------- */
+/* ================================
+   수정
+================================ */
 
 function openEditMode() {
 
-    if (
-        !selectedRecordData
-    ) {
+    if (!selectedRecordData) {
         return;
     }
 
-
     editType =
         selectedRecordData.type || "";
-
 
     editObservations =
         Array.isArray(
@@ -990,43 +957,32 @@ function openEditMode() {
             ]
             : [];
 
-
     editAfter =
         selectedRecordData.after || "";
-
 
     document.getElementById(
         "editMemo"
     ).value =
         selectedRecordData.memo || "";
 
-
     document.getElementById(
         "modalTitle"
     ).textContent =
         "기록 수정";
-
 
     document.getElementById(
         "modalView"
     ).style.display =
         "none";
 
-
     document.getElementById(
         "modalEdit"
     ).style.display =
         "block";
 
-
     updateEditSelections();
-
 }
 
-
-/* --------------------------------
-   수정 선택 상태
--------------------------------- */
 
 function updateEditSelections() {
 
@@ -1074,13 +1030,12 @@ function updateEditSelections() {
             );
 
         });
-
 }
 
 
-/* --------------------------------
-   발작 유형 수정
--------------------------------- */
+/* ================================
+   수정 선택
+================================ */
 
 document
     .querySelectorAll(
@@ -1095,7 +1050,6 @@ document
                 editType =
                     button.dataset.type;
 
-
                 updateEditSelections();
 
             }
@@ -1103,10 +1057,6 @@ document
 
     });
 
-
-/* --------------------------------
-   관찰 사항 수정
--------------------------------- */
 
 document
     .querySelectorAll(
@@ -1121,7 +1071,6 @@ document
                 const value =
                     button.dataset.observation;
 
-
                 if (
                     value ===
                     "특이사항 없음"
@@ -1134,9 +1083,7 @@ document
                     updateEditSelections();
 
                     return;
-
                 }
-
 
                 editObservations =
                     editObservations.filter(
@@ -1144,7 +1091,6 @@ document
                             item !==
                             "특이사항 없음"
                     );
-
 
                 if (
                     editObservations.includes(
@@ -1166,7 +1112,6 @@ document
 
                 }
 
-
                 updateEditSelections();
 
             }
@@ -1174,10 +1119,6 @@ document
 
     });
 
-
-/* --------------------------------
-   발작 후 상태 수정
--------------------------------- */
 
 document
     .querySelectorAll(
@@ -1192,7 +1133,6 @@ document
                 const value =
                     button.dataset.after;
 
-
                 if (
                     editAfter ===
                     value
@@ -1204,9 +1144,7 @@ document
 
                     editAfter =
                         value;
-
                 }
-
 
                 updateEditSelections();
 
@@ -1215,21 +1153,20 @@ document
 
     });
 
-/* --------------------------------
-   기록 수정 버튼
--------------------------------- */
 
 document
-    .getElementById("editRecordButton")
+    .getElementById(
+        "editRecordButton"
+    )
     .addEventListener(
         "click",
         openEditMode
     );
 
 
-/* --------------------------------
+/* ================================
    수정 저장
--------------------------------- */
+================================ */
 
 document
     .getElementById(
@@ -1249,23 +1186,16 @@ document
                 );
 
                 return;
-
             }
-
 
             const saveButton =
                 document.getElementById(
                     "saveEditButton"
                 );
 
-
-            saveButton.disabled =
-                true;
-
-
+            saveButton.disabled = true;
             saveButton.textContent =
                 "저장 중...";
-
 
             try {
 
@@ -1278,16 +1208,10 @@ document
                     ),
 
                     {
-
-                        type:
-                            editType,
-
+                        type: editType,
                         observations:
                             editObservations,
-
-                        after:
-                            editAfter,
-
+                        after: editAfter,
                         memo:
                             document
                                 .getElementById(
@@ -1295,24 +1219,18 @@ document
                                 )
                                 .value
                                 .trim()
-
                     }
 
                 );
-
 
                 alert(
                     "기록이 수정되었습니다."
                 );
 
-
                 closeModal();
 
-
                 await loadTodayRecords();
-
                 await loadRecentRecords();
-
 
             } catch (error) {
 
@@ -1324,11 +1242,7 @@ document
 
             }
 
-
-            saveButton.disabled =
-                false;
-
-
+            saveButton.disabled = false;
             saveButton.textContent =
                 "수정 저장";
 
@@ -1336,9 +1250,9 @@ document
     );
 
 
-/* --------------------------------
+/* ================================
    수정 취소
--------------------------------- */
+================================ */
 
 document
     .getElementById(
@@ -1353,12 +1267,10 @@ document
             ).textContent =
                 "발작 기록";
 
-
             document.getElementById(
                 "modalView"
             ).style.display =
                 "block";
-
 
             document.getElementById(
                 "modalEdit"
@@ -1369,9 +1281,9 @@ document
     );
 
 
-/* --------------------------------
+/* ================================
    모달 닫기
--------------------------------- */
+================================ */
 
 function closeModal() {
 
@@ -1383,14 +1295,8 @@ function closeModal() {
             "show"
         );
 
-
-    selectedRecordId =
-        null;
-
-
-    selectedRecordData =
-        null;
-
+    selectedRecordId = null;
+    selectedRecordData = null;
 }
 
 
@@ -1414,9 +1320,9 @@ document
     );
 
 
-/* --------------------------------
+/* ================================
    삭제
--------------------------------- */
+================================ */
 
 document
     .getElementById(
@@ -1426,23 +1332,18 @@ document
         "click",
         async () => {
 
-            if (
-                !selectedRecordId
-            ) {
+            if (!selectedRecordId) {
                 return;
             }
-
 
             const confirmed =
                 confirm(
                     "이 기록을 삭제하시겠습니까?"
                 );
 
-
             if (!confirmed) {
                 return;
             }
-
 
             try {
 
@@ -1456,24 +1357,18 @@ document
 
                 );
 
-
                 closeModal();
 
-
                 await loadTodayRecords();
-
                 await loadRecentRecords();
-
 
                 alert(
                     "기록이 삭제되었습니다."
                 );
 
-
             } catch (error) {
 
                 console.error(error);
-
 
                 alert(
                     "기록 삭제에 실패했습니다."
@@ -1485,14 +1380,12 @@ document
     );
 
 
-/* --------------------------------
+/* ================================
    시작
--------------------------------- */
+================================ */
 
 updateTodayDate();
-
 loadTodayRecords();
-
 loadRecentRecords();
 
 </script>

@@ -1,5 +1,5 @@
 /* ========================================
-   기본 설정
+   기본
 ======================================== */
 
 * {
@@ -12,7 +12,7 @@ html {
 
 body {
     margin: 0;
-    background: #f4f5f7;
+    background: #f5f6f8;
     color: #202124;
     font-family:
         -apple-system,
@@ -29,11 +29,12 @@ textarea {
 
 button {
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 }
 
 
 /* ========================================
-   앱 전체
+   앱
 ======================================== */
 
 .app {
@@ -41,162 +42,156 @@ button {
     max-width: 560px;
     min-height: 100vh;
     margin: 0 auto;
-    padding: 24px 18px 40px;
+    padding: 22px 18px 40px;
 }
 
 
 /* ========================================
-   홈
+   홈 헤더
 ======================================== */
 
 .home-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: 24px;
+
+    margin-bottom: 20px;
 }
 
-.sub-title {
+.home-label {
     margin: 0 0 4px;
-    color: #777b82;
-    font-size: 14px;
+
+    color: #8a8e95;
+    font-size: 13px;
 }
 
 .home-header h1 {
     margin: 0;
-    font-size: 28px;
+
+    font-size: 27px;
     font-weight: 750;
     letter-spacing: -0.8px;
 }
 
-.today {
-    color: #777b82;
+.home-date {
+    color: #777c84;
     font-size: 14px;
 }
 
 
 /* ========================================
-   공통 카드
+   오늘 카드
 ======================================== */
-
-.today-card,
-.record-panel {
-    background: #ffffff;
-    border: 1px solid #e6e7e9;
-    border-radius: 18px;
-}
 
 .today-card {
-    padding: 20px;
     margin-bottom: 14px;
+    padding: 20px;
+
+    border: 1px solid #e6e7ea;
+    border-radius: 18px;
+
+    background: #ffffff;
 }
 
-.record-panel {
-    padding: 22px 18px;
-}
-
-
-/* ========================================
-   공통 제목
-======================================== */
-
-.section-title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.section-title h2 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 700;
-}
-
-.section-title span {
-    color: #888c92;
-    font-size: 13px;
-}
-
-.section-heading {
+.today-card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    margin-bottom: 20px;
 }
 
-.section-heading h2 {
+.today-card-label {
+    display: block;
+    margin-bottom: 4px;
+
+    color: #8b9097;
+    font-size: 12px;
+}
+
+.today-card h2 {
     margin: 0;
+
+    font-size: 16px;
+    font-weight: 600;
 }
 
-
-/* ========================================
-   오늘 요약
-======================================== */
-
-.today-summary {
+.summary-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    margin-top: 20px;
 }
 
 .summary-item {
+    min-width: 0;
+    padding: 0 10px;
+
     text-align: center;
+
     border-right: 1px solid #eeeeef;
 }
 
+.summary-item:first-child {
+    padding-left: 0;
+}
+
 .summary-item:last-child {
+    padding-right: 0;
     border-right: none;
+}
+
+.summary-item span {
+    display: block;
+    margin-bottom: 7px;
+
+    color: #858990;
+    font-size: 11px;
 }
 
 .summary-item strong {
     display: block;
-    margin-bottom: 6px;
-    font-size: 24px;
-    font-weight: 750;
-}
 
-.summary-item span {
-    color: #858990;
-    font-size: 12px;
+    font-size: 21px;
+    font-weight: 750;
+    letter-spacing: -0.5px;
 }
 
 
 /* ========================================
-   발작 기록 버튼
+   기록 시작 버튼
 ======================================== */
 
-.record-start {
+.record-start-section {
     margin-bottom: 28px;
 }
 
-.record-button {
+.record-main-button {
     width: 100%;
-    min-height: 76px;
+    min-height: 88px;
 
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
 
-    padding: 14px 20px;
+    padding: 15px 17px;
 
     border: none;
     border-radius: 18px;
 
-    background: #4f63d9;
+    background: #25272b;
     color: #ffffff;
 
     text-align: left;
 
-    box-shadow: 0 4px 12px rgba(79, 99, 217, 0.18);
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.12);
 }
 
-.record-button:active {
+.record-main-button:active {
     transform: scale(0.985);
 }
 
-.record-button-icon {
-    width: 42px;
-    height: 42px;
+.record-main-icon {
+    width: 50px;
+    height: 50px;
 
     display: flex;
     align-items: center;
@@ -205,23 +200,77 @@ button {
     flex-shrink: 0;
 
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.18);
 
-    font-size: 28px;
+    background: #ffffff;
+    color: #25272b;
+
+    font-size: 30px;
     font-weight: 300;
     line-height: 1;
 }
 
-.record-button strong {
-    display: block;
-    margin-bottom: 4px;
-    font-size: 17px;
+.record-main-text {
+    flex: 1;
+    min-width: 0;
 }
 
-.record-button small {
+.record-main-text strong {
     display: block;
-    color: rgba(255, 255, 255, 0.78);
+    margin-bottom: 5px;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.record-main-text small {
+    display: block;
+
+    color: #bfc2c7;
     font-size: 12px;
+}
+
+.record-main-arrow {
+    color: #bfc2c7;
+    font-size: 23px;
+}
+
+
+/* ========================================
+   섹션 헤더
+======================================== */
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    margin-bottom: 7px;
+}
+
+.section-label {
+    display: block;
+    margin-bottom: 3px;
+
+    color: #92969d;
+    font-size: 12px;
+}
+
+.section-header h2 {
+    margin: 0;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.report-link {
+    padding: 5px 0;
+
+    border: none;
+    background: none;
+
+    color: #555a61;
+    font-size: 13px;
+    font-weight: 600;
 }
 
 
@@ -233,36 +282,25 @@ button {
     margin-bottom: 20px;
 }
 
-.report-link,
-.text-button {
-    padding: 5px 0;
-
-    border: none;
-    background: none;
-
-    color: #4f63d9;
-    font-size: 13px;
-}
-
 .recent-record {
     width: 100%;
 
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 13px;
 
-    padding: 16px 0;
+    padding: 15px 2px;
 
     border: none;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e8e9eb;
 
     background: transparent;
 
     text-align: left;
 }
 
-.recent-record-left {
-    width: 70px;
+.recent-record-time {
+    width: 55px;
 
     display: flex;
     flex-direction: column;
@@ -271,16 +309,16 @@ button {
     flex-shrink: 0;
 }
 
-.recent-record-left strong {
+.recent-record-time strong {
     font-size: 14px;
 }
 
-.recent-record-left span {
-    color: #888;
-    font-size: 12px;
+.recent-record-time span {
+    color: #92969c;
+    font-size: 11px;
 }
 
-.recent-record-middle {
+.recent-record-info {
     flex: 1;
     min-width: 0;
 
@@ -289,7 +327,7 @@ button {
     gap: 4px;
 }
 
-.recent-record-middle strong {
+.recent-record-info strong {
     overflow: hidden;
 
     text-overflow: ellipsis;
@@ -298,22 +336,29 @@ button {
     font-size: 14px;
 }
 
-.recent-record-middle span {
-    color: #888;
-    font-size: 12px;
+.recent-record-info span {
+    overflow: hidden;
+
+    color: #92969c;
+    font-size: 11px;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.recent-record-right {
+.recent-record-duration {
     display: flex;
     align-items: center;
     gap: 8px;
+
+    flex-shrink: 0;
 }
 
-.recent-record-right strong {
+.recent-record-duration strong {
     font-size: 13px;
 }
 
-.recent-record-right span {
+.recent-record-duration span {
     color: #aaa;
     font-size: 20px;
 }
@@ -323,44 +368,13 @@ button {
    기록 없음
 ======================================== */
 
-.empty-record {
-    margin-top: 12px;
-    padding: 32px 20px;
+.empty-state {
+    padding: 30px 10px;
 
-    border: 1px dashed #d9dadd;
-    border-radius: 16px;
-
-    background: #fafafa;
+    color: #999da3;
+    font-size: 13px;
 
     text-align: center;
-}
-
-.empty-icon {
-    margin-bottom: 10px;
-    color: #b7bac0;
-    font-size: 24px;
-}
-
-.empty-record p {
-    margin: 0 0 7px;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.empty-record span {
-    color: #8a8e94;
-    font-size: 12px;
-    line-height: 1.6;
-}
-
-.empty-state,
-.report-empty {
-    padding: 24px 0;
-
-    text-align: center;
-
-    color: #999;
-    font-size: 14px;
 }
 
 
@@ -373,16 +387,17 @@ button {
     align-items: flex-start;
     gap: 10px;
 
-    margin-top: 22px;
+    margin-top: 20px;
     padding: 14px;
 
-    border-radius: 12px;
-    background: #eceef2;
+    border-radius: 13px;
+
+    background: #eceef1;
 }
 
 .notice-icon {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
 
     display: flex;
     align-items: center;
@@ -390,19 +405,27 @@ button {
 
     flex-shrink: 0;
 
-    border: 1px solid #969aa1;
+    border: 1px solid #a0a4aa;
     border-radius: 50%;
 
-    color: #777b82;
+    color: #777c83;
     font-size: 11px;
     font-weight: 700;
+}
+
+.notice strong {
+    display: block;
+    margin-bottom: 3px;
+
+    color: #656a72;
+    font-size: 12px;
 }
 
 .notice p {
     margin: 0;
 
-    color: #777b82;
-    font-size: 12px;
+    color: #858a91;
+    font-size: 11px;
     line-height: 1.55;
 }
 
@@ -414,22 +437,42 @@ button {
 .page-header {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
 
-    margin-bottom: 24px;
+    margin-bottom: 18px;
+}
+
+.page-header > div {
+    min-width: 0;
+}
+
+.page-header-label {
+    display: block;
+    margin-bottom: 2px;
+
+    color: #92969d;
+    font-size: 11px;
 }
 
 .page-header h1 {
     margin: 0;
-    font-size: 24px;
+
+    font-size: 23px;
+    font-weight: 700;
 }
 
 .back-button {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
 
-    border: 1px solid #e1e2e5;
-    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border: 1px solid #e0e2e5;
+    border-radius: 11px;
 
     background: #ffffff;
     color: #33363b;
@@ -446,111 +489,57 @@ button {
     padding-bottom: 30px;
 }
 
-.record-intro {
-    padding: 20px 0 28px;
-    text-align: center;
-}
-
-.record-circle {
-    width: 68px;
-    height: 68px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    margin: 0 auto 18px;
-
-    border-radius: 50%;
-    background: #eef0ff;
-    color: #4f63d9;
-
-    font-size: 38px;
-    font-weight: 300;
-}
-
-.record-intro h2 {
-    margin: 0 0 10px;
-
-    font-size: 21px;
-    line-height: 1.45;
-}
-
-.record-intro p {
-    margin: 0;
-
-    color: #858990;
-    font-size: 13px;
-    line-height: 1.6;
-}
-
 
 /* ========================================
-   기록 타이머
+   타이머 카드
 ======================================== */
 
-.timer-area {
-    padding: 12px 0 20px;
+.timer-card {
+    margin-bottom: 12px;
+    padding: 25px 18px 18px;
+
+    border: 1px solid #e4e5e8;
+    border-radius: 20px;
+
+    background: #ffffff;
+
     text-align: center;
 }
 
-#timer,
-.timer {
-    font-size: 48px;
-    font-weight: 700;
-    letter-spacing: 2px;
+.timer-card-label {
+    margin-bottom: 14px;
+
+    color: #858a91;
+    font-size: 12px;
+}
+
+.main-timer {
+    margin-bottom: 7px;
+
+    color: #22252a;
+
+    font-size: 54px;
+    font-weight: 750;
+    letter-spacing: -2px;
+
     font-variant-numeric: tabular-nums;
 }
 
-.timer {
-    margin: 22px 0 6px;
-    font-size: 58px;
-    letter-spacing: -2px;
-}
-
 .timer-status {
-    margin-top: 8px;
-    color: #888;
-    font-size: 14px;
+    min-height: 20px;
+
+    color: #858a91;
+    font-size: 13px;
 }
 
 .timer-status.recording {
-    color: #d94b4b;
-    font-weight: 600;
-}
-
-.timer-status.completed {
-    color: #4c8b63;
-    font-weight: 600;
-}
-
-.recording-panel {
-    text-align: center;
-}
-
-.recording-status {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-
-    color: #d85b5b;
-    font-size: 14px;
+    color: #d44d4d;
     font-weight: 700;
 }
 
-.status-dot {
-    width: 9px;
-    height: 9px;
-
-    border-radius: 50%;
-    background: #d85b5b;
-}
-
-.recording-time {
-    margin: 0 0 28px;
-    color: #858990;
-    font-size: 13px;
+.timer-status.completed {
+    color: #4d8a62;
+    font-weight: 700;
 }
 
 
@@ -561,27 +550,29 @@ button {
 .timer-buttons {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 9px;
+
+    margin-top: 20px;
 }
 
 .timer-buttons button {
-    min-height: 54px;
+    min-height: 55px;
 
     border: none;
     border-radius: 12px;
 
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .start-button {
-    background: #222;
-    color: #fff;
+    background: #25272b;
+    color: #ffffff;
 }
 
 .stop-button {
-    background: #eee;
-    color: #555;
+    background: #e9eaec;
+    color: #555960;
 }
 
 .timer-buttons button:disabled {
@@ -589,86 +580,128 @@ button {
     cursor: default;
 }
 
-.large-start-button,
-.large-stop-button {
-    width: 100%;
-    border: none;
-    border-radius: 15px;
-    color: #fff;
-    font-weight: 700;
+
+/* ========================================
+   기록 순서 안내
+======================================== */
+
+.record-guide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+
+    margin: 0 0 18px;
+
+    color: #8b9097;
+    font-size: 11px;
 }
 
-.large-start-button {
-    min-height: 64px;
-    background: #4f63d9;
-    font-size: 19px;
-}
-
-.large-stop-button {
-    min-height: 60px;
-    background: #33363b;
-    font-size: 18px;
+.record-guide span:nth-child(odd) {
+    color: #666b72;
+    font-weight: 600;
 }
 
 
 /* ========================================
-   선택 항목
+   기록 패널
 ======================================== */
 
+.record-panel {
+    margin-bottom: 12px;
+    padding: 20px 17px;
+
+    border: 1px solid #e5e6e9;
+    border-radius: 17px;
+
+    background: #ffffff;
+}
+
+.panel-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    margin-bottom: 14px;
+}
+
+.panel-heading h2 {
+    margin: 0 0 5px;
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.panel-heading p {
+    margin: 0;
+
+    color: #8a8f96;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
 .required {
-    color: #e05252;
-    font-size: 14px;
+    color: #d84c4c;
 }
 
-.section-help {
-    margin: -4px 0 14px;
-    color: #888;
-    font-size: 13px;
+.required-label,
+.optional-label {
+    flex-shrink: 0;
+
+    padding: 4px 7px;
+
+    border-radius: 6px;
+
+    font-size: 10px;
 }
 
-.form-section {
-    margin-top: 24px;
+.required-label {
+    background: #f8eaea;
+    color: #c54b4b;
 }
 
-.form-section h2 {
-    margin: 0 0 11px;
-    font-size: 15px;
+.optional-label {
+    background: #f0f1f3;
+    color: #858a91;
 }
 
-.form-section h2 span {
-    color: #999da3;
-    font-size: 12px;
-    font-weight: 400;
-}
 
-.choice-grid,
-.edit-choice-grid {
+/* ========================================
+   선택 버튼
+======================================== */
+
+.choice-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 8px;
 }
 
-.choice-button,
-.edit-choice-button {
+.choice-button {
     min-height: 50px;
 
-    padding: 10px;
+    padding: 9px 8px;
 
-    border: 1px solid #ddd;
-    border-radius: 10px;
+    border: 1px solid #dfe1e4;
+    border-radius: 11px;
 
-    background: #fff;
-    color: #333;
+    background: #ffffff;
+    color: #373a3f;
 
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 500;
 }
 
-.choice-button.selected,
-.edit-choice-button.selected {
-    border-color: #222;
-    background: #222;
-    color: #fff;
-    font-weight: 600;
+.choice-button.selected {
+    border-color: #25272b;
+    background: #25272b;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.choice-button:active {
+    transform: scale(0.98);
 }
 
 
@@ -677,33 +710,33 @@ button {
 ======================================== */
 
 #memo,
-.memo,
 #editMemo {
     width: 100%;
-    min-height: 110px;
+    min-height: 105px;
 
-    box-sizing: border-box;
+    padding: 13px;
 
-    padding: 14px;
+    border: 1px solid #dfe1e4;
+    border-radius: 11px;
 
-    border: 1px solid #ddd;
-    border-radius: 10px;
+    background: #ffffff;
+    color: #33363b;
 
-    background: #fff;
-
-    color: #333;
-
-    font-family: inherit;
-    font-size: 14px;
+    font-size: 13px;
+    line-height: 1.5;
 
     resize: vertical;
     outline: none;
 }
 
 #memo:focus,
-.memo:focus,
 #editMemo:focus {
-    border-color: #999;
+    border-color: #999da3;
+}
+
+#memo::placeholder,
+#editMemo::placeholder {
+    color: #a4a8ae;
 }
 
 
@@ -712,217 +745,45 @@ button {
 ======================================== */
 
 .save-section {
-    margin-top: 10px;
+    margin-top: 18px;
 }
 
 .save-button {
     width: 100%;
-    min-height: 56px;
+    min-height: 58px;
 
     border: none;
-    border-radius: 12px;
+    border-radius: 13px;
 
-    background: #222;
-    color: #fff;
+    background: #25272b;
+    color: #ffffff;
 
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .save-button:disabled {
-    background: #ddd;
-    color: #999;
+    background: #dfe0e2;
+    color: #999da3;
     cursor: default;
 }
 
-.save-button:active,
-.large-start-button:active,
-.large-stop-button:active {
+.save-button:active {
     transform: scale(0.985);
 }
 
+.save-help {
+    margin: 8px 0 0;
 
-/* ========================================
-   기록 완료
-======================================== */
-
-.complete-box {
-    margin-bottom: 26px;
-    padding: 18px;
-
-    border-radius: 14px;
-    background: #f5f6f8;
+    color: #969aa1;
+    font-size: 10px;
 
     text-align: center;
 }
 
-.complete-box span {
-    display: block;
-    margin-bottom: 6px;
-
-    color: #777b82;
-    font-size: 13px;
-}
-
-.complete-box strong {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 30px;
-}
-
-.complete-box small {
-    color: #858990;
-    font-size: 12px;
-}
-
 
 /* ========================================
-   리포트 - 날짜별
-======================================== */
-
-.daily-record {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    padding: 14px 0;
-
-    border-bottom: 1px solid #eee;
-
-    font-size: 15px;
-}
-
-.daily-record:last-child {
-    border-bottom: none;
-}
-
-.daily-record strong {
-    font-size: 16px;
-}
-
-
-/* ========================================
-   리포트 - 상세 기록
-======================================== */
-
-.detail-record {
-    padding: 16px 0;
-    border-bottom: 1px solid #eee;
-}
-
-.detail-record:last-child {
-    border-bottom: none;
-}
-
-.detail-record-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    margin-bottom: 14px;
-}
-
-.detail-record-top div {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.detail-record-top div span {
-    color: #777;
-    font-size: 14px;
-}
-
-.detail-record-top > strong {
-    font-size: 15px;
-}
-
-.detail-record-info {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.detail-record-info > div {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-
-    font-size: 14px;
-}
-
-.detail-record-info span {
-    color: #888;
-    flex-shrink: 0;
-}
-
-.detail-record-info strong {
-    text-align: right;
-    font-weight: 500;
-}
-
-
-/* ========================================
-   리포트 - 시간대 / 유형별 막대
-======================================== */
-
-.time-bar-row,
-.type-bar-row {
-    margin-bottom: 18px;
-}
-
-.time-bar-row:last-child,
-.type-bar-row:last-child {
-    margin-bottom: 0;
-}
-
-.time-bar-label,
-.type-bar-label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    margin-bottom: 7px;
-
-    font-size: 14px;
-}
-
-.type-bar-label span,
-.time-bar-label span {
-    color: #555;
-}
-
-.type-bar-label strong,
-.time-bar-label strong {
-    font-size: 13px;
-}
-
-.time-bar-background,
-.type-bar-background {
-    width: 100%;
-    height: 10px;
-
-    overflow: hidden;
-
-    border-radius: 5px;
-
-    background: #eee;
-}
-
-.time-bar-fill,
-.type-bar-fill {
-    height: 100%;
-    border-radius: 5px;
-}
-
-.type-bar-fill,
-.time-bar-fill {
-    background: #555;
-}
-
-
-/* ========================================
-   기록 상세 모달
+   모달
 ======================================== */
 
 .record-modal {
@@ -942,7 +803,7 @@ button {
     position: absolute;
     inset: 0;
 
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(0, 0, 0, 0.48);
 }
 
 .record-modal-content {
@@ -953,14 +814,15 @@ button {
     transform: translateX(-50%);
 
     width: min(560px, 100%);
-    max-height: 85vh;
+    max-height: 88vh;
 
     overflow-y: auto;
 
-    padding: 24px 24px 30px;
+    padding: 22px 20px 30px;
 
-    background: #fff;
-    border-radius: 20px 20px 0 0;
+    border-radius: 21px 21px 0 0;
+
+    background: #ffffff;
 }
 
 .record-modal-header {
@@ -968,11 +830,20 @@ button {
     justify-content: space-between;
     align-items: center;
 
-    margin-bottom: 20px;
+    margin-bottom: 18px;
+}
+
+.modal-label {
+    display: block;
+    margin-bottom: 3px;
+
+    color: #92969d;
+    font-size: 11px;
 }
 
 .record-modal-header h2 {
     margin: 0;
+
     font-size: 20px;
 }
 
@@ -983,14 +854,16 @@ button {
     border: none;
     border-radius: 50%;
 
-    background: #f1f1f1;
+    background: #f0f1f3;
 
-    font-size: 24px;
+    color: #555960;
+
+    font-size: 23px;
 }
 
 
 /* ========================================
-   모달 상세 정보
+   모달 정보
 ======================================== */
 
 .modal-info {
@@ -998,26 +871,44 @@ button {
     flex-direction: column;
 }
 
-.modal-info > div {
+.modal-info-row {
     display: flex;
     justify-content: space-between;
-    gap: 20px;
+    align-items: flex-start;
+
+    gap: 18px;
 
     padding: 14px 0;
 
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #eeeeef;
 
-    font-size: 14px;
+    font-size: 13px;
 }
 
-.modal-info span {
-    color: #888;
+.modal-info-row span {
     flex-shrink: 0;
+
+    color: #898e95;
 }
 
-.modal-info strong {
+.modal-info-row strong {
+    color: #33363b;
+
     text-align: right;
-    font-weight: 500;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.modal-info-row.highlight {
+    padding: 17px 12px;
+    border: none;
+    border-radius: 11px;
+
+    background: #f4f5f6;
+}
+
+.modal-info-row.highlight strong {
+    font-size: 16px;
 }
 
 
@@ -1028,41 +919,35 @@ button {
 .modal-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 9px;
 
-    margin-top: 24px;
+    margin-top: 20px;
 }
 
 .edit-record-button,
 .delete-record-button {
-    width: 100%;
-    padding: 15px;
+    min-height: 50px;
 
     border: none;
-    border-radius: 10px;
+    border-radius: 11px;
 
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 700;
 }
 
 .edit-record-button {
-    background: #222;
-    color: #fff;
+    background: #25272b;
+    color: #ffffff;
 }
 
 .delete-record-button {
-    margin-top: 0;
-    background: #fff5f5;
-    color: #d33;
-}
-
-.delete-record-button:active {
-    background: #ffe8e8;
+    background: #fff1f1;
+    color: #d04343;
 }
 
 
 /* ========================================
-   모달 - 수정
+   수정
 ======================================== */
 
 .modal-edit {
@@ -1070,24 +955,46 @@ button {
 }
 
 .edit-section {
-    margin-bottom: 24px;
+    margin-bottom: 22px;
 }
 
 .edit-section h3 {
-    margin: 0 0 12px;
-    font-size: 15px;
+    margin: 0 0 11px;
+
+    font-size: 14px;
+}
+
+.edit-choice-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
 }
 
 .edit-choice-button {
-    min-height: 48px;
-    padding: 9px;
-    font-size: 13px;
+    min-height: 47px;
+
+    padding: 8px;
+
+    border: 1px solid #dfe1e4;
+    border-radius: 10px;
+
+    background: #ffffff;
+    color: #373a3f;
+
+    font-size: 12px;
+}
+
+.edit-choice-button.selected {
+    border-color: #25272b;
+    background: #25272b;
+    color: #ffffff;
+    font-weight: 700;
 }
 
 .edit-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 9px;
 }
 
 .cancel-edit-button,
@@ -1095,24 +1002,158 @@ button {
     min-height: 52px;
 
     border: none;
-    border-radius: 10px;
+    border-radius: 11px;
 
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 700;
 }
 
 .cancel-edit-button {
-    background: #eee;
-    color: #555;
+    background: #e9eaec;
+    color: #555960;
 }
 
 .save-edit-button {
-    background: #222;
-    color: #fff;
+    background: #25272b;
+    color: #ffffff;
 }
 
 .save-edit-button:disabled {
     opacity: 0.5;
+}
+
+
+/* ========================================
+   리포트
+======================================== */
+
+.daily-record {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 14px 0;
+
+    border-bottom: 1px solid #eeeeef;
+
+    font-size: 14px;
+}
+
+.daily-record:last-child {
+    border-bottom: none;
+}
+
+.daily-record strong {
+    font-size: 15px;
+}
+
+
+.detail-record {
+    padding: 16px 0;
+
+    border-bottom: 1px solid #eeeeef;
+}
+
+.detail-record:last-child {
+    border-bottom: none;
+}
+
+.detail-record-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 13px;
+}
+
+.detail-record-top div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-record-top div span {
+    color: #777c83;
+    font-size: 13px;
+}
+
+.detail-record-top > strong {
+    font-size: 14px;
+}
+
+.detail-record-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.detail-record-info > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+
+    font-size: 13px;
+}
+
+.detail-record-info span {
+    color: #888d94;
+    flex-shrink: 0;
+}
+
+.detail-record-info strong {
+    text-align: right;
+    font-weight: 500;
+}
+
+
+.time-bar-row,
+.type-bar-row {
+    margin-bottom: 17px;
+}
+
+.time-bar-row:last-child,
+.type-bar-row:last-child {
+    margin-bottom: 0;
+}
+
+.time-bar-label,
+.type-bar-label {
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 7px;
+
+    font-size: 13px;
+}
+
+.type-bar-label span,
+.time-bar-label span {
+    color: #555a61;
+}
+
+.type-bar-label strong,
+.time-bar-label strong {
+    font-size: 12px;
+}
+
+.time-bar-background,
+.type-bar-background {
+    width: 100%;
+    height: 9px;
+
+    overflow: hidden;
+
+    border-radius: 5px;
+
+    background: #ececee;
+}
+
+.time-bar-fill,
+.type-bar-fill {
+    height: 100%;
+    border-radius: 5px;
+
+    background: #555a61;
 }
 
 
@@ -1123,42 +1164,51 @@ button {
 @media (max-width: 400px) {
 
     .app {
-        padding: 20px 14px 32px;
+        padding: 18px 14px 32px;
     }
 
     .home-header h1 {
         font-size: 25px;
     }
 
-    .today-summary {
-        margin-top: 18px;
+    .summary-item {
+        padding: 0 5px;
     }
 
     .summary-item strong {
-        font-size: 21px;
+        font-size: 19px;
     }
 
-    .record-button {
-        min-height: 72px;
-        padding: 12px 16px;
+    .record-main-button {
+        min-height: 82px;
+    }
+
+    .record-main-icon {
+        width: 46px;
+        height: 46px;
+
+        font-size: 27px;
+    }
+
+    .record-main-text strong {
+        font-size: 16px;
+    }
+
+    .main-timer {
+        font-size: 48px;
     }
 
     .choice-grid,
     .edit-choice-grid {
-        grid-template-columns: 1fr;
         gap: 7px;
     }
 
     .choice-button {
-        font-size: 13px;
+        min-height: 48px;
+        font-size: 12px;
     }
 
-    #timer {
-        font-size: 42px;
+    .record-panel {
+        padding: 18px 15px;
     }
-
-    .timer {
-        font-size: 50px;
-    }
-
 }
