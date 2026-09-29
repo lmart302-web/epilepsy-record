@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>발작 기록하기</title>
+
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- 헤더 -->
+    <header class="page-header">
+
+        <button
+            class="back-button"
+            onclick="location.href='index.html'"
+        >
+            ←
+        </button>
+
+        <h1>발작 기록</h1>
+
+    </header>
+
+
+    <main class="record-page">
+
+        <!-- 시간 기록 -->
+        <section class="record-panel">
+
+            <h2>발작 시간</h2>
+
+            <div class="timer-area">
+
+                <div id="timer">
+                    00:00
+                </div>
+
+                <div class="timer-status" id="timerStatus">
+                    시작 버튼을 눌러 기록하세요.
+                </div>
+
+            </div>
+
+
+            <div class="timer-buttons">
+
+                <button
+                    id="startButton"
+                    class="start-button"
+                >
+                    발작 시작
+                </button>
+
+
+                <button
+                    id="stopButton"
+                    class="stop-button"
+                    disabled
+                >
+                    발작 종료
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- 발작 유형 -->
+        <section class="record-panel">
+
+            <h2>
+                발작 유형
+                <span class="required">*</span>
+            </h2>
+
+            <p class="section-help">
+                관찰된 형태를 선택하세요.
+            </p>
+
+
+            <div
+                class="choice-grid"
+                id="typeChoices"
+            >
+
+                <button
+                    class="choice-button"
+                    data-type="전신 경련"
+                >
+                    전신 경련
+                </button>
+
+                <button
+                    class="choice-button"
+                    data-type="의식 소실"
+                >
+                    의식 소실
+                </button>
+
+                <button
+                    class="choice-button"
+                    data-type="멍함 / 반응 저하"
+                >
+                    멍함 / 반응 저하
+                </button>
+
+                <button
+                    class="choice-button"
+                    data-type="부분 경련"
+                >
+                    부분 경련
+                </button>
+
+                <button
+                    class="choice-button"
+                    data-type="기타"
+                >
+                    기타
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- 관찰 사항 -->
+        <section class="record-panel">
+
+            <h2>관찰 사항</h2>
+
+            <p class="section-help">
+                해당되는 내용을 모두 선택하세요.
+            </p>
+
+
+            <div
+                class="choice-grid"
+                id="observationChoices"
+            >
+
+                <button
+                    class="choice-button"
+                    data-observation="넘어짐"
+                >
+                    넘어짐
+                </button>
+
+                <button
+                    class="choice-button"
+                    data-observation="호흡 이상"
+                >
+                    호흡 이상
+                </button>
+
+                <button
+                    class="choice-button"
+                    data-observation="침 흘림"
+                >
+                    침 흘림
+                </button>
+
+                <button
+                    class="choice-button"
+                    data-observation="구토"
+                >
+                    구토
+                </button>
+
+                <button
+                    class="choice-button"
+                    data-observation="특이사항 없음"
+                >
+                    특이사항 없음
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- 발작 후 상태 -->
+        <section class="record-panel">
+
+            <h2>발작 후 상태</h2>
+
+            <p class="section-help">
+                발작 종료 후 상태를 선택하세요.
+            </p>
+
+
+            <div
+                class="choice-grid"
+                id="afterChoices"
+            >
+
+                <button
+                    class="choice-button"
+                    data-after="바로 회복"
+                >
+                    바로 회복
+                </button>
+
+                <button
+                    class="choice-button"
+                    data-after="졸림"
+                >
+                    졸림
+                </button>
+
+                <button
+                    class="choice-button"
+                    data-after="혼란"
+                >
+                    혼란
+                </button>
+
+                <button
+                    class="choice-button"
+                    data-after="평소와 다름"
+                >
+                    평소와 다름
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- 메모 -->
+        <section class="record-panel">
+
+            <h2>메모</h2>
+
+            <textarea
+                id="memo"
+                placeholder="추가로 기록할 내용이 있으면 입력하세요."
+            ></textarea>
+
+        </section>
+
+
+        <!-- 저장 -->
+        <section class="save-section">
+
+            <button
+                id="saveButton"
+                class="save-button"
+                disabled
+            >
+                기록 저장
+            </button>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script type="module">
+
+import {
+    collection,
+    addDoc,
+    Timestamp
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+import { db } from "./js/firebase.js";
+
+
+/* --------------------------------
+   상태
+-------------------------------- */
+
+let startTime = null;
+
+let endTime = null;
+
+let timerInterval = null;
+
+let selectedType = "";
+
+let selectedObservations = [];
+
+let selectedAfter = "";
+
+
+/* --------------------------------
+   요소
+-------------------------------- */
+
+const timer =
+    document.getElementById("timer");
+
+const timerStatus =
+    document.getElementById("timerStatus");
+
+const startButton =
+    document.getElementById("startButton");
+
+const stopButton =
+    document.getElementById("stopButton");
+
+const saveButton =
+    document.getElementById("saveButton");
+
+
+/* --------------------------------
+   타이머
+-------------------------------- */
+
+function updateTimer() {
+
+    if (!startTime) {
+        return;
+    }
+
+
+    const now =
+        new Date();
+
+
+    const seconds =
+        Math.floor(
+            (now - startTime) / 1000
+        );
+
+
+    const minutes =
+        Math.floor(seconds / 60);
+
+
+    const remainSeconds =
+        seconds % 60;
+
+
+    timer.textContent =
+        `${String(minutes).padStart(2, "0")}:${String(remainSeconds).padStart(2, "0")}`;
+
+}
+
+
+/* --------------------------------
+   시작
+-------------------------------- */
+
+startButton.addEventListener(
+    "click",
+    () => {
+
+        startTime =
+            new Date();
+
+
+        endTime = null;
+
+
+        timer.textContent =
+            "00:00";
+
+
+        timerStatus.textContent =
+            "발작 진행 중";
+
+
+        timerStatus.classList.add(
+            "recording"
+        );
+
+
+        startButton.disabled =
+            true;
+
+
+        stopButton.disabled =
+            false;
+
+
+        saveButton.disabled =
+            true;
+
+
+        timerInterval =
+            setInterval(
+                updateTimer,
+                1000
+            );
+
+    }
+);
+
+
+/* --------------------------------
+   종료
+-------------------------------- */
+
+stopButton.addEventListener(
+    "click",
+    () => {
+
+        if (!startTime) {
+            return;
+        }
+
+
+        endTime =
+            new Date();
+
+
+        clearInterval(
+            timerInterval
+        );
+
+
+        updateTimer();
+
+
+        timerStatus.textContent =
+            "발작 기록이 종료되었습니다.";
+
+
+        timerStatus.classList.remove(
+            "recording"
+        );
+
+
+        timerStatus.classList.add(
+            "completed"
+        );
+
+
+        stopButton.disabled =
+            true;
+
+
+        validateSave();
+
+    }
+);
+
+
+/* --------------------------------
+   발작 유형
+-------------------------------- */
+
+document
+    .querySelectorAll(
+        "#typeChoices .choice-button"
+    )
+    .forEach((button) => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                document
+                    .querySelectorAll(
+                        "#typeChoices .choice-button"
+                    )
+                    .forEach((item) => {
+
+                        item.classList.remove(
+                            "selected"
+                        );
+
+                    });
+
+
+                button.classList.add(
+                    "selected"
+                );
+
+
+                selectedType =
+                    button.dataset.type;
+
+
+                validateSave();
+
+            }
+        );
+
+    });
+
+
+/* --------------------------------
+   관찰 사항
+-------------------------------- */
+
+document
+    .querySelectorAll(
+        "#observationChoices .choice-button"
+    )
+    .forEach((button) => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                const value =
+                    button.dataset.observation;
+
+
+                if (
+                    value ===
+                    "특이사항 없음"
+                ) {
+
+                    selectedObservations = [
+                        "특이사항 없음"
+                    ];
+
+
+                    document
+                        .querySelectorAll(
+                            "#observationChoices .choice-button"
+                        )
+                        .forEach((item) => {
+
+                            item.classList.remove(
+                                "selected"
+                            );
+
+                        });
+
+
+                    button.classList.add(
+                        "selected"
+                    );
+
+
+                    return;
+
+                }
+
+
+                document
+                    .querySelector(
+                        '#observationChoices [data-observation="특이사항 없음"]'
+                    )
+                    .classList.remove(
+                        "selected"
+                    );
+
+
+                if (
+                    selectedObservations.includes(
+                        value
+                    )
+                ) {
+
+                    selectedObservations =
+                        selectedObservations.filter(
+                            (item) =>
+                                item !== value
+                        );
+
+
+                    button.classList.remove(
+                        "selected"
+                    );
+
+                } else {
+
+                    selectedObservations.push(
+                        value
+                    );
+
+
+                    button.classList.add(
+                        "selected"
+                    );
+
+                }
+
+            }
+        );
+
+    });
+
+
+/* --------------------------------
+   발작 후 상태
+-------------------------------- */
+
+document
+    .querySelectorAll(
+        "#afterChoices .choice-button"
+    )
+    .forEach((button) => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                document
+                    .querySelectorAll(
+                        "#afterChoices .choice-button"
+                    )
+                    .forEach((item) => {
+
+                        item.classList.remove(
+                            "selected"
+                        );
+
+                    });
+
+
+                button.classList.add(
+                    "selected"
+                );
+
+
+                selectedAfter =
+                    button.dataset.after;
+
+            }
+        );
+
+    });
+
+
+/* --------------------------------
+   저장 가능 여부
+-------------------------------- */
+
+function validateSave() {
+
+    const canSave =
+        startTime &&
+        endTime &&
+        selectedType;
+
+
+    saveButton.disabled =
+        !canSave;
+
+}
+
+
+/* --------------------------------
+   저장
+-------------------------------- */
+
+saveButton.addEventListener(
+    "click",
+    async () => {
+
+        if (
+            !startTime ||
+            !endTime ||
+            !selectedType
+        ) {
+
+            alert(
+                "발작 시간과 발작 유형을 확인해주세요."
+            );
+
+            return;
+
+        }
+
+
+        saveButton.disabled =
+            true;
+
+
+        saveButton.textContent =
+            "저장 중...";
+
+
+        const durationSeconds =
+            Math.floor(
+                (endTime - startTime) / 1000
+            );
+
+
+        const record = {
+
+            startedAt:
+                Timestamp.fromDate(
+                    startTime
+                ),
+
+            endedAt:
+                Timestamp.fromDate(
+                    endTime
+                ),
+
+            duration:
+                durationSeconds,
+
+            type:
+                selectedType,
+
+            observations:
+                selectedObservations,
+
+            after:
+                selectedAfter,
+
+            memo:
+                document
+                    .getElementById("memo")
+                    .value
+                    .trim(),
+
+            createdAt:
+                Timestamp.now()
+
+        };
+
+
+        try {
+
+            await addDoc(
+                collection(
+                    db,
+                    "seizures"
+                ),
+                record
+            );
+
+
+            alert(
+                "발작 기록이 저장되었습니다."
+            );
+
+
+            location.href =
+                "index.html";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            alert(
+                "기록 저장에 실패했습니다."
+            );
+
+
+            saveButton.disabled =
+                false;
+
+
+            saveButton.textContent =
+                "기록 저장";
+
+        }
+
+    }
+);
+
+
+/* --------------------------------
+   페이지 이탈 방지
+-------------------------------- */
+
+window.addEventListener(
+    "beforeunload",
+    (event) => {
+
+        if (
+            startTime &&
+            !endTime
+        ) {
+
+            event.preventDefault();
+
+            event.returnValue = "";
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>

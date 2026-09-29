@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>발작 리포트</title>
+
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- 상단 -->
+    <header class="page-header">
+
+        <button
+            class="back-button"
+            onclick="location.href='index.html'"
+        >
+            ←
+        </button>
+
+        <h1>발작 리포트</h1>
+
+    </header>
+
+
+    <main class="report-page">
+
+        <!-- 월 선택 -->
+        <section class="period-selector">
+
+            <button id="prevMonth">
+                ‹
+            </button>
+
+            <strong id="currentMonth">
+                2026년 9월
+            </strong>
+
+            <button id="nextMonth">
+                ›
+            </button>
+
+        </section>
+
+
+        <!-- 월간 요약 -->
+        <section class="report-section">
+
+            <h2>월간 요약</h2>
+
+            <div class="report-stats">
+
+                <div class="report-stat">
+                    <span>발작 횟수</span>
+                    <strong id="totalCount">0회</strong>
+                </div>
+
+                <div class="report-stat">
+                    <span>평균 지속시간</span>
+                    <strong id="averageDuration">0초</strong>
+                </div>
+
+                <div class="report-stat">
+                    <span>가장 긴 발작</span>
+                    <strong id="longestDuration">0초</strong>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- 시간대별 발생 -->
+        <section class="report-section">
+
+            <h2>시간대별 발생</h2>
+
+            <div id="timeBars"></div>
+
+        </section>
+
+
+        <!-- 발작 유형별 발생 -->
+        <section class="report-section">
+
+            <h2>발작 유형별 발생</h2>
+
+            <div id="typeBars"></div>
+
+        </section>
+
+
+        <!-- 날짜별 발생 -->
+        <section class="report-section">
+
+            <h2>날짜별 발생</h2>
+
+            <div id="dailyRecords"></div>
+
+        </section>
+
+
+        <!-- 상세 기록 -->
+        <section class="report-section">
+
+            <h2>상세 기록</h2>
+
+            <div id="detailRecords"></div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script type="module">
+
+import {
+    collection,
+    getDocs,
+    query,
+    where,
+    orderBy
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+import { db } from "./js/firebase.js";
+
+
+let currentDate = new Date();
+
+
+/* --------------------------------
+   시간 표시
+-------------------------------- */
+
+function formatDuration(seconds) {
+
+    if (!seconds) {
+        return "0초";
+    }
+
+
+    const minutes =
+        Math.floor(seconds / 60);
+
+
+    const remainSeconds =
+        seconds % 60;
+
+
+    if (minutes === 0) {
+        return `${remainSeconds}초`;
+    }
+
+
+    if (remainSeconds === 0) {
+        return `${minutes}분`;
+    }
+
+
+    return `${minutes}분 ${remainSeconds}초`;
+
+}
+
+
+/* --------------------------------
+   월 표시
+-------------------------------- */
+
+function updateMonthTitle() {
+
+    const year =
+        currentDate.getFullYear();
+
+
+    const month =
+        currentDate.getMonth() + 1;
+
+
+    document.getElementById(
+        "currentMonth"
+    ).textContent =
+        `${year}년 ${month}월`;
+
+}
+
+
+/* --------------------------------
+   리포트 불러오기
+-------------------------------- */
+
+async function loadReport() {
+
+    updateMonthTitle();
+
+
+    const year =
+        currentDate.getFullYear();
+
+
+    const month =
+        currentDate.getMonth();
+
+
+    const startDate =
+        new Date(
+            year,
+            month,
+            1
+        );
+
+
+    const endDate =
+        new Date(
+            year,
+            month + 1,
+            1
+        );
+
+
+    try {
+
+        const q = query(
+
+            collection(
+                db,
+                "seizures"
+            ),
+
+            where(
+                "startedAt",
+                ">=",
+                startDate
+            ),
+
+            where(
+                "startedAt",
+                "<",
+                endDate
+            ),
+
+            orderBy(
+                "startedAt",
+                "asc"
+            )
+
+        );
+
+
+        const snapshot =
+            await getDocs(q);
+
+
+        const records = [];
+
+
+        snapshot.forEach((doc) => {
+
+            records.push({
+
+                id: doc.id,
+
+                ...doc.data()
+
+            });
+
+        });
+
+
+        updateSummary(records);
+
+        updateTimeBars(records);
+
+        updateTypeBars(records);
+
+        updateDailyRecords(records);
+
+        updateDetailRecords(records);
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "리포트를 불러오지 못했습니다."
+        );
+
+    }
+
+}
+
+
+/* --------------------------------
+   월간 요약
+-------------------------------- */
+
+function updateSummary(records) {
+
+    const totalCount =
+        records.length;
+
+
+    let totalDuration = 0;
+
+    let longestDuration = 0;
+
+
+    records.forEach((record) => {
+
+        const duration =
+            record.duration || 0;
+
+
+        totalDuration +=
+            duration;
+
+
+        if (
+            duration >
+            longestDuration
+        ) {
+
+            longestDuration =
+                duration;
+
+        }
+
+    });
+
+
+    const averageDuration =
+        totalCount > 0
+            ? Math.round(
+                totalDuration /
+                totalCount
+            )
+            : 0;
+
+
+    document.getElementById(
+        "totalCount"
+    ).textContent =
+        `${totalCount}회`;
+
+
+    document.getElementById(
+        "averageDuration"
+    ).textContent =
+        formatDuration(
+            averageDuration
+        );
+
+
+    document.getElementById(
+        "longestDuration"
+    ).textContent =
+        formatDuration(
+            longestDuration
+        );
+
+}
+
+
+/* --------------------------------
+   시간대별 발생
+-------------------------------- */
+
+function updateTimeBars(records) {
+
+    const timeCounts = [
+        0,
+        0,
+        0,
+        0
+    ];
+
+
+    records.forEach((record) => {
+
+        const date =
+            record.startedAt.toDate();
+
+
+        const hour =
+            date.getHours();
+
+
+        if (hour < 6) {
+
+            timeCounts[0]++;
+
+        } else if (hour < 12) {
+
+            timeCounts[1]++;
+
+        } else if (hour < 18) {
+
+            timeCounts[2]++;
+
+        } else {
+
+            timeCounts[3]++;
+
+        }
+
+    });
+
+
+    const labels = [
+        "00~06시",
+        "06~12시",
+        "12~18시",
+        "18~24시"
+    ];
+
+
+    const container =
+        document.getElementById(
+            "timeBars"
+        );
+
+
+    container.innerHTML = "";
+
+
+    const maxCount =
+        Math.max(
+            ...timeCounts,
+            1
+        );
+
+
+    timeCounts.forEach(
+        (count, index) => {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "time-bar-row";
+
+
+            const width =
+                count === 0
+                    ? 0
+                    : Math.max(
+                        (count /
+                        maxCount) *
+                        100,
+                        8
+                    );
+
+
+            row.innerHTML = `
+
+                <div class="time-bar-label">
+
+                    <span>
+                        ${labels[index]}
+                    </span>
+
+                    <strong>
+                        ${count}회
+                    </strong>
+
+                </div>
+
+
+                <div class="time-bar-background">
+
+                    <div
+                        class="time-bar-fill"
+                        style="width: ${width}%"
+                    ></div>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/* --------------------------------
+   발작 유형별 발생
+-------------------------------- */
+
+function updateTypeBars(records) {
+
+    const typeCounts = {};
+
+
+    records.forEach((record) => {
+
+        const type =
+            record.type ||
+            "기타";
+
+
+        if (!typeCounts[type]) {
+
+            typeCounts[type] =
+                0;
+
+        }
+
+
+        typeCounts[type]++;
+
+    });
+
+
+    const container =
+        document.getElementById(
+            "typeBars"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (records.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="report-empty">
+                해당 월의 기록이 없습니다.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const sortedTypes =
+        Object.entries(
+            typeCounts
+        ).sort(
+            (a, b) =>
+                b[1] - a[1]
+        );
+
+
+    const maxCount =
+        Math.max(
+            ...sortedTypes.map(
+                item => item[1]
+            ),
+            1
+        );
+
+
+    sortedTypes.forEach(
+        ([type, count]) => {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "type-bar-row";
+
+
+            const width =
+                Math.max(
+                    (count /
+                    maxCount) *
+                    100,
+                    8
+                );
+
+
+            row.innerHTML = `
+
+                <div class="type-bar-label">
+
+                    <span>
+                        ${type}
+                    </span>
+
+                    <strong>
+                        ${count}회
+                    </strong>
+
+                </div>
+
+
+                <div class="type-bar-background">
+
+                    <div
+                        class="type-bar-fill"
+                        style="width: ${width}%"
+                    ></div>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/* --------------------------------
+   날짜별 발생
+-------------------------------- */
+
+function updateDailyRecords(records) {
+
+    const container =
+        document.getElementById(
+            "dailyRecords"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (records.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="report-empty">
+                해당 월의 기록이 없습니다.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const dailyCounts = {};
+
+
+    records.forEach((record) => {
+
+        const date =
+            record.startedAt.toDate();
+
+
+        const day =
+            date.getDate();
+
+
+        if (!dailyCounts[day]) {
+
+            dailyCounts[day] =
+                0;
+
+        }
+
+
+        dailyCounts[day]++;
+
+    });
+
+
+    const sortedDays =
+        Object.keys(
+            dailyCounts
+        )
+        .map(Number)
+        .sort(
+            (a, b) =>
+                b - a
+        );
+
+
+    sortedDays.forEach(
+        (day) => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "daily-record";
+
+
+            item.innerHTML = `
+
+                <span>
+                    ${day}일
+                </span>
+
+                <strong>
+                    ${dailyCounts[day]}회
+                </strong>
+
+            `;
+
+
+            container.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+/* --------------------------------
+   상세 기록
+-------------------------------- */
+
+function updateDetailRecords(records) {
+
+    const container =
+        document.getElementById(
+            "detailRecords"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (records.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="report-empty">
+                해당 월의 기록이 없습니다.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const sortedRecords =
+        [...records].sort(
+            (a, b) => {
+
+                return (
+                    b.startedAt.toDate() -
+                    a.startedAt.toDate()
+                );
+
+            }
+        );
+
+
+    sortedRecords.forEach(
+        (record) => {
+
+            const start =
+                record.startedAt.toDate();
+
+
+            const observations =
+                Array.isArray(
+                    record.observations
+                )
+                    ? record.observations.join(
+                        ", "
+                    )
+                    : "";
+
+
+            const timeText =
+                start.toLocaleTimeString(
+                    "ko-KR",
+                    {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    }
+                );
+
+
+            const dateText =
+                `${start.getMonth() + 1}월
+                 ${start.getDate()}일`;
+
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "detail-record";
+
+
+            item.innerHTML = `
+
+                <div class="detail-record-top">
+
+                    <div>
+
+                        <strong>
+                            ${dateText}
+                        </strong>
+
+                        <span>
+                            ${timeText}
+                        </span>
+
+                    </div>
+
+
+                    <strong>
+                        ${formatDuration(
+                            record.duration || 0
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-record-info">
+
+                    <div>
+
+                        <span>
+                            발작 유형
+                        </span>
+
+                        <strong>
+                            ${record.type || "-"}
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            발작 후 상태
+                        </span>
+
+                        <strong>
+                            ${record.after || "-"}
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            관찰 사항
+                        </span>
+
+                        <strong>
+                            ${observations || "-"}
+                        </strong>
+
+                    </div>
+
+
+                    ${
+                        record.memo
+                            ? `
+                            <div>
+
+                                <span>
+                                    메모
+                                </span>
+
+                                <strong>
+                                    ${record.memo}
+                                </strong>
+
+                            </div>
+                            `
+                            : ""
+                    }
+
+                </div>
+
+            `;
+
+
+            container.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+/* --------------------------------
+   이전 달
+-------------------------------- */
+
+document
+    .getElementById(
+        "prevMonth"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            currentDate.setMonth(
+                currentDate.getMonth() - 1
+            );
+
+
+            loadReport();
+
+        }
+    );
+
+
+/* --------------------------------
+   다음 달
+-------------------------------- */
+
+document
+    .getElementById(
+        "nextMonth"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            currentDate.setMonth(
+                currentDate.getMonth() + 1
+            );
+
+
+            loadReport();
+
+        }
+    );
+
+
+/* --------------------------------
+   시작
+-------------------------------- */
+
+loadReport();
+
+</script>
+
+</body>
+</html>
