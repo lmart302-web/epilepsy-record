@@ -1449,3 +1449,17 @@ button {
         font-size: 13px;
     }
 }
+
+.report-link {
+    background-color: #f1f3f5;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.report-link:hover {
+    background-color: #e9ecef;
+}
