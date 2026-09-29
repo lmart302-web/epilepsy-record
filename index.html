@@ -2,7 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>발작 기록</title>
 
@@ -18,7 +21,10 @@
 
         <div>
             <p class="home-label">오늘의 기록</p>
-            <h1>발작 기록</h1>
+
+            <h1>
+                발작 기록
+            </h1>
         </div>
 
         <span
@@ -39,11 +45,15 @@
             <div class="today-card-header">
 
                 <div>
-                    <span class="today-card-label">오늘</span>
+
+                    <span class="today-card-label">
+                        오늘
+                    </span>
 
                     <h2 id="todayMonth">
                         2026년 9월
                     </h2>
+
                 </div>
 
             </div>
@@ -53,7 +63,9 @@
 
                 <div class="summary-item">
 
-                    <span>발작</span>
+                    <span>
+                        발작
+                    </span>
 
                     <strong id="todayCount">
                         0회
@@ -64,7 +76,9 @@
 
                 <div class="summary-item">
 
-                    <span>총 지속시간</span>
+                    <span>
+                        총 지속시간
+                    </span>
 
                     <strong id="todayTotal">
                         0초
@@ -75,7 +89,9 @@
 
                 <div class="summary-item">
 
-                    <span>가장 긴 발작</span>
+                    <span>
+                        가장 긴 발작
+                    </span>
 
                     <strong id="todayLongest">
                         0초
@@ -88,55 +104,91 @@
         </section>
 
 
-        <!-- 발작 기록하기 -->
+        <!-- 발작 기록 -->
         <section class="record-start-section">
 
-            <button
-                class="record-main-button"
-                onclick="location.href='record.html'"
-            >
+            <div class="record-actions">
 
-                <span class="record-main-icon">
-                    +
-                </span>
+                <!-- 지금 바로 기록 -->
+                <button
+                    type="button"
+                    class="record-main-button"
+                    onclick="location.href='record.html'"
+                >
 
-                <span class="record-main-text">
+                    <span class="record-main-icon">
+                        +
+                    </span>
 
-                    <strong>
-                        발작 기록하기
-                    </strong>
+                    <span class="record-main-text">
 
-                    <small>
-                        발작이 시작되면 바로 눌러주세요
-                    </small>
+                        <strong>
+                            발작 기록 시작
+                        </strong>
 
-                </span>
+                        <small>
+                            지금 발작이 시작되면
+                        </small>
 
-                <span class="record-main-arrow">
-                    →
-                </span>
+                    </span>
 
-            </button>
+                    <span class="record-main-arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+                <!-- 지난 발작 수동 입력 -->
+                <button
+                    type="button"
+                    class="manual-record-button"
+                    onclick="location.href='manual.html'"
+                >
+
+                    <span class="manual-record-icon">
+                        ✎
+                    </span>
+
+                    <span>
+
+                        <strong>
+                            지난 발작 수동 입력
+                        </strong>
+
+                        <small>
+                            놓친 기록을 직접 입력
+                        </small>
+
+                    </span>
+
+                </button>
+
+            </div>
 
         </section>
 
 
-        <!-- 최근 기록 -->
+        <!-- 마지막 발작 -->
         <section class="recent-section">
 
             <div class="section-header">
 
                 <div>
+
                     <span class="section-label">
-                        최근 기록
+                        기록 확인
                     </span>
 
                     <h2>
-                        최근 발작
+                        마지막 발작
                     </h2>
+
                 </div>
 
+
                 <button
+                    type="button"
                     class="report-link"
                     onclick="location.href='report.html'"
                 >
@@ -146,10 +198,10 @@
             </div>
 
 
-            <div id="recentRecords">
+            <div id="lastRecord">
 
                 <div class="empty-state">
-                    아직 기록이 없습니다.
+                    아직 기록된 발작이 없습니다.
                 </div>
 
             </div>
@@ -173,6 +225,7 @@
                 <p>
                     발작이 시작되면 기록을 시작하고,
                     종료 후 관찰된 내용을 선택해 주세요.
+                    놓친 경우에는 수동으로 입력할 수 있습니다.
                 </p>
 
             </div>
@@ -184,7 +237,9 @@
 </div>
 
 
-<!-- 상세 / 수정 모달 -->
+<!-- ========================================
+     상세 / 수정 모달
+======================================== -->
 
 <div
     id="recordModal"
@@ -196,9 +251,11 @@
 
     <div class="record-modal-content">
 
+        <!-- 모달 헤더 -->
         <div class="record-modal-header">
 
             <div>
+
                 <span class="modal-label">
                     기록 상세
                 </span>
@@ -206,9 +263,12 @@
                 <h2 id="modalTitle">
                     발작 기록
                 </h2>
+
             </div>
 
+
             <button
+                type="button"
                 id="closeModal"
                 class="modal-close"
             >
@@ -227,6 +287,7 @@
             <div class="modal-actions">
 
                 <button
+                    type="button"
                     id="editRecordButton"
                     class="edit-record-button"
                 >
@@ -235,6 +296,7 @@
 
 
                 <button
+                    type="button"
                     id="deleteRecordButton"
                     class="delete-record-button"
                 >
@@ -252,11 +314,13 @@
             class="modal-edit"
         >
 
+            <!-- 발작 유형 -->
             <div class="edit-section">
 
                 <h3>
                     발작 유형
                 </h3>
+
 
                 <div
                     class="edit-choice-grid"
@@ -264,34 +328,43 @@
                 >
 
                     <button
+                        type="button"
                         class="edit-choice-button"
                         data-type="전신 경련"
                     >
                         전신 경련
                     </button>
 
+
                     <button
+                        type="button"
                         class="edit-choice-button"
                         data-type="의식 소실"
                     >
                         의식 소실
                     </button>
 
+
                     <button
+                        type="button"
                         class="edit-choice-button"
                         data-type="멍함 / 반응 저하"
                     >
                         멍함 / 반응 저하
                     </button>
 
+
                     <button
+                        type="button"
                         class="edit-choice-button"
                         data-type="부분 경련"
                     >
                         부분 경련
                     </button>
 
+
                     <button
+                        type="button"
                         class="edit-choice-button"
                         data-type="기타"
                     >
@@ -303,11 +376,13 @@
             </div>
 
 
+            <!-- 관찰 사항 -->
             <div class="edit-section">
 
                 <h3>
                     관찰 사항
                 </h3>
+
 
                 <div
                     class="edit-choice-grid"
@@ -315,34 +390,43 @@
                 >
 
                     <button
+                        type="button"
                         class="edit-choice-button"
                         data-observation="넘어짐"
                     >
                         넘어짐
                     </button>
 
+
                     <button
+                        type="button"
                         class="edit-choice-button"
                         data-observation="호흡 이상"
                     >
                         호흡 이상
                     </button>
 
+
                     <button
+                        type="button"
                         class="edit-choice-button"
                         data-observation="침 흘림"
                     >
                         침 흘림
                     </button>
 
+
                     <button
+                        type="button"
                         class="edit-choice-button"
                         data-observation="구토"
                     >
                         구토
                     </button>
 
+
                     <button
+                        type="button"
                         class="edit-choice-button"
                         data-observation="특이사항 없음"
                     >
@@ -354,11 +438,13 @@
             </div>
 
 
+            <!-- 발작 후 상태 -->
             <div class="edit-section">
 
                 <h3>
                     발작 후 상태
                 </h3>
+
 
                 <div
                     class="edit-choice-grid"
@@ -366,27 +452,34 @@
                 >
 
                     <button
+                        type="button"
                         class="edit-choice-button"
                         data-after="바로 회복"
                     >
                         바로 회복
                     </button>
 
+
                     <button
+                        type="button"
                         class="edit-choice-button"
                         data-after="졸림"
                     >
                         졸림
                     </button>
 
+
                     <button
+                        type="button"
                         class="edit-choice-button"
                         data-after="혼란"
                     >
                         혼란
                     </button>
 
+
                     <button
+                        type="button"
                         class="edit-choice-button"
                         data-after="평소와 다름"
                     >
@@ -398,11 +491,13 @@
             </div>
 
 
+            <!-- 메모 -->
             <div class="edit-section">
 
                 <h3>
                     메모
                 </h3>
+
 
                 <textarea
                     id="editMemo"
@@ -412,16 +507,20 @@
             </div>
 
 
+            <!-- 수정 버튼 -->
             <div class="edit-actions">
 
                 <button
+                    type="button"
                     id="cancelEditButton"
                     class="cancel-edit-button"
                 >
                     취소
                 </button>
 
+
                 <button
+                    type="button"
                     id="saveEditButton"
                     class="save-edit-button"
                 >
@@ -462,9 +561,9 @@ let editObservations = [];
 let editAfter = "";
 
 
-/* ================================
+/* ========================================
    공통
-================================ */
+======================================== */
 
 function formatDuration(seconds) {
 
@@ -510,9 +609,9 @@ function formatTime(date) {
 }
 
 
-/* ================================
+/* ========================================
    오늘 날짜
-================================ */
+======================================== */
 
 function updateTodayDate() {
 
@@ -523,6 +622,7 @@ function updateTodayDate() {
     ).textContent =
         `${today.getMonth() + 1}월 ${today.getDate()}일`;
 
+
     document.getElementById(
         "todayMonth"
     ).textContent =
@@ -532,9 +632,9 @@ function updateTodayDate() {
 }
 
 
-/* ================================
+/* ========================================
    오늘 기록
-================================ */
+======================================== */
 
 async function loadTodayRecords() {
 
@@ -551,6 +651,7 @@ async function loadTodayRecords() {
         today.getMonth(),
         today.getDate() + 1
     );
+
 
     try {
 
@@ -580,11 +681,14 @@ async function loadTodayRecords() {
 
         );
 
+
         const snapshot =
             await getDocs(q);
 
+
         let totalDuration = 0;
         let longestDuration = 0;
+
 
         snapshot.forEach((item) => {
 
@@ -593,22 +697,28 @@ async function loadTodayRecords() {
             const duration =
                 data.duration || 0;
 
+
             totalDuration += duration;
+
 
             if (
                 duration >
                 longestDuration
             ) {
+
                 longestDuration =
                     duration;
+
             }
 
         });
+
 
         document.getElementById(
             "todayCount"
         ).textContent =
             `${snapshot.size}회`;
+
 
         document.getElementById(
             "todayTotal"
@@ -617,12 +727,14 @@ async function loadTodayRecords() {
                 totalDuration
             );
 
+
         document.getElementById(
             "todayLongest"
         ).textContent =
             formatDuration(
                 longestDuration
             );
+
 
     } catch (error) {
 
@@ -632,19 +744,21 @@ async function loadTodayRecords() {
         );
 
     }
+
 }
 
 
-/* ================================
-   최근 기록
-================================ */
+/* ========================================
+   마지막 발작
+======================================== */
 
-async function loadRecentRecords() {
+async function loadLastRecord() {
 
     const container =
         document.getElementById(
-            "recentRecords"
+            "lastRecord"
         );
+
 
     try {
 
@@ -660,14 +774,17 @@ async function loadRecentRecords() {
                 "desc"
             ),
 
-            limit(10)
+            limit(1)
 
         );
+
 
         const snapshot =
             await getDocs(q);
 
+
         container.innerHTML = "";
+
 
         if (snapshot.empty) {
 
@@ -680,139 +797,162 @@ async function loadRecentRecords() {
             return;
         }
 
-        snapshot.forEach((item) => {
 
-            const data = item.data();
+        const item =
+            snapshot.docs[0];
 
-            const start =
-                data.startedAt.toDate();
+        const data =
+            item.data();
 
-            const record =
-                document.createElement(
-                    "button"
+        const start =
+            data.startedAt.toDate();
+
+
+        const record =
+            document.createElement(
+                "button"
+            );
+
+
+        record.type = "button";
+
+        record.className =
+            "recent-record";
+
+
+        record.innerHTML = `
+
+            <div class="recent-record-time">
+
+                <strong>
+                    ${formatTime(start)}
+                </strong>
+
+                <span>
+                    ${start.getFullYear()}년
+                    ${start.getMonth() + 1}월
+                    ${start.getDate()}일
+                </span>
+
+            </div>
+
+
+            <div class="recent-record-info">
+
+                <strong>
+                    ${data.type || "기록 없음"}
+                </strong>
+
+                <span>
+                    ${data.after || "발작 후 상태 미기록"}
+                </span>
+
+            </div>
+
+
+            <div class="recent-record-duration">
+
+                <strong>
+                    ${formatDuration(
+                        data.duration || 0
+                    )}
+                </strong>
+
+                <span>
+                    ›
+                </span>
+
+            </div>
+
+        `;
+
+
+        record.addEventListener(
+            "click",
+            () => {
+
+                openRecordModal(
+                    item.id,
+                    data
                 );
 
-            record.className =
-                "recent-record";
-
-            record.innerHTML = `
-
-                <div class="recent-record-time">
-
-                    <strong>
-                        ${formatTime(start)}
-                    </strong>
-
-                    <span>
-                        ${start.getMonth() + 1}월
-                        ${start.getDate()}일
-                    </span>
-
-                </div>
+            }
+        );
 
 
-                <div class="recent-record-info">
+        container.appendChild(
+            record
+        );
 
-                    <strong>
-                        ${data.type || "기록 없음"}
-                    </strong>
-
-                    <span>
-                        ${data.after || "발작 후 상태 미기록"}
-                    </span>
-
-                </div>
-
-
-                <div class="recent-record-duration">
-
-                    <strong>
-                        ${formatDuration(
-                            data.duration || 0
-                        )}
-                    </strong>
-
-                    <span>
-                        ›
-                    </span>
-
-                </div>
-
-            `;
-
-            record.addEventListener(
-                "click",
-                () => {
-                    openRecordModal(
-                        item.id,
-                        data
-                    );
-                }
-            );
-
-            container.appendChild(
-                record
-            );
-
-        });
 
     } catch (error) {
 
         console.error(
-            "최근 기록 불러오기 실패:",
+            "마지막 발작 불러오기 실패:",
             error
         );
+
 
         container.innerHTML = `
             <div class="empty-state">
                 기록을 불러오지 못했습니다.
             </div>
         `;
+
     }
+
 }
 
 
-/* ================================
+/* ========================================
    상세 모달
-================================ */
+======================================== */
 
 function openRecordModal(id, data) {
 
     selectedRecordId = id;
     selectedRecordData = data;
 
+
     const start =
         data.startedAt.toDate();
+
 
     const end =
         data.endedAt
             ? data.endedAt.toDate()
             : null;
 
+
     const observations =
         Array.isArray(data.observations)
             ? data.observations.join(", ")
             : "-";
+
 
     document.getElementById(
         "modalTitle"
     ).textContent =
         "발작 기록";
 
+
     document.getElementById(
         "modalView"
     ).style.display =
         "block";
+
 
     document.getElementById(
         "modalEdit"
     ).style.display =
         "none";
 
+
     const modalBody =
         document.getElementById(
             "modalBody"
         );
+
 
     modalBody.innerHTML = `
 
@@ -842,7 +982,7 @@ function openRecordModal(id, data) {
                     ${
                         end
                             ? formatTime(end)
-                            : "-"
+                            : "미입력"
                     }
                 </strong>
 
@@ -925,6 +1065,7 @@ function openRecordModal(id, data) {
 
     `;
 
+
     document
         .getElementById(
             "recordModal"
@@ -935,9 +1076,9 @@ function openRecordModal(id, data) {
 }
 
 
-/* ================================
+/* ========================================
    수정
-================================ */
+======================================== */
 
 function openEditMode() {
 
@@ -945,8 +1086,10 @@ function openEditMode() {
         return;
     }
 
+
     editType =
         selectedRecordData.type || "";
+
 
     editObservations =
         Array.isArray(
@@ -957,28 +1100,34 @@ function openEditMode() {
             ]
             : [];
 
+
     editAfter =
         selectedRecordData.after || "";
+
 
     document.getElementById(
         "editMemo"
     ).value =
         selectedRecordData.memo || "";
 
+
     document.getElementById(
         "modalTitle"
     ).textContent =
         "기록 수정";
+
 
     document.getElementById(
         "modalView"
     ).style.display =
         "none";
 
+
     document.getElementById(
         "modalEdit"
     ).style.display =
         "block";
+
 
     updateEditSelections();
 }
@@ -1030,12 +1179,13 @@ function updateEditSelections() {
             );
 
         });
+
 }
 
 
-/* ================================
+/* ========================================
    수정 선택
-================================ */
+======================================== */
 
 document
     .querySelectorAll(
@@ -1071,6 +1221,7 @@ document
                 const value =
                     button.dataset.observation;
 
+
                 if (
                     value ===
                     "특이사항 없음"
@@ -1085,12 +1236,14 @@ document
                     return;
                 }
 
+
                 editObservations =
                     editObservations.filter(
                         item =>
                             item !==
                             "특이사항 없음"
                     );
+
 
                 if (
                     editObservations.includes(
@@ -1111,6 +1264,7 @@ document
                     );
 
                 }
+
 
                 updateEditSelections();
 
@@ -1133,6 +1287,7 @@ document
                 const value =
                     button.dataset.after;
 
+
                 if (
                     editAfter ===
                     value
@@ -1144,7 +1299,9 @@ document
 
                     editAfter =
                         value;
+
                 }
+
 
                 updateEditSelections();
 
@@ -1164,9 +1321,9 @@ document
     );
 
 
-/* ================================
+/* ========================================
    수정 저장
-================================ */
+======================================== */
 
 document
     .getElementById(
@@ -1188,14 +1345,18 @@ document
                 return;
             }
 
+
             const saveButton =
                 document.getElementById(
                     "saveEditButton"
                 );
 
+
             saveButton.disabled = true;
+
             saveButton.textContent =
                 "저장 중...";
+
 
             try {
 
@@ -1209,9 +1370,12 @@ document
 
                     {
                         type: editType,
+
                         observations:
                             editObservations,
+
                         after: editAfter,
+
                         memo:
                             document
                                 .getElementById(
@@ -1223,18 +1387,23 @@ document
 
                 );
 
+
                 alert(
                     "기록이 수정되었습니다."
                 );
 
+
                 closeModal();
 
+
                 await loadTodayRecords();
-                await loadRecentRecords();
+                await loadLastRecord();
+
 
             } catch (error) {
 
                 console.error(error);
+
 
                 alert(
                     "기록 수정에 실패했습니다."
@@ -1242,7 +1411,9 @@ document
 
             }
 
+
             saveButton.disabled = false;
+
             saveButton.textContent =
                 "수정 저장";
 
@@ -1250,9 +1421,9 @@ document
     );
 
 
-/* ================================
+/* ========================================
    수정 취소
-================================ */
+======================================== */
 
 document
     .getElementById(
@@ -1267,10 +1438,12 @@ document
             ).textContent =
                 "발작 기록";
 
+
             document.getElementById(
                 "modalView"
             ).style.display =
                 "block";
+
 
             document.getElementById(
                 "modalEdit"
@@ -1281,9 +1454,9 @@ document
     );
 
 
-/* ================================
+/* ========================================
    모달 닫기
-================================ */
+======================================== */
 
 function closeModal() {
 
@@ -1294,6 +1467,7 @@ function closeModal() {
         .classList.remove(
             "show"
         );
+
 
     selectedRecordId = null;
     selectedRecordData = null;
@@ -1320,9 +1494,9 @@ document
     );
 
 
-/* ================================
+/* ========================================
    삭제
-================================ */
+======================================== */
 
 document
     .getElementById(
@@ -1336,14 +1510,17 @@ document
                 return;
             }
 
+
             const confirmed =
                 confirm(
                     "이 기록을 삭제하시겠습니까?"
                 );
 
+
             if (!confirmed) {
                 return;
             }
+
 
             try {
 
@@ -1357,18 +1534,23 @@ document
 
                 );
 
+
                 closeModal();
 
+
                 await loadTodayRecords();
-                await loadRecentRecords();
+                await loadLastRecord();
+
 
                 alert(
                     "기록이 삭제되었습니다."
                 );
 
+
             } catch (error) {
 
                 console.error(error);
+
 
                 alert(
                     "기록 삭제에 실패했습니다."
@@ -1380,13 +1562,15 @@ document
     );
 
 
-/* ================================
+/* ========================================
    시작
-================================ */
+======================================== */
 
 updateTodayDate();
+
 loadTodayRecords();
-loadRecentRecords();
+
+loadLastRecord();
 
 </script>
 
