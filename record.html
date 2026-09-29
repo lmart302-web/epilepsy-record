@@ -9,20 +9,17 @@
 
     <title>발작 기록하기</title>
 
-    <link
-        rel="stylesheet"
-        href="./css/style.css"
-    >
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
 
 <div class="app">
 
-    <!-- 헤더 -->
     <header class="page-header">
 
         <button
+            type="button"
             class="back-button"
             onclick="location.href='index.html'"
         >
@@ -30,6 +27,7 @@
         </button>
 
         <div>
+
             <span class="page-header-label">
                 기록
             </span>
@@ -37,6 +35,7 @@
             <h1>
                 발작 기록
             </h1>
+
         </div>
 
     </header>
@@ -48,39 +47,41 @@
         <section class="timer-card">
 
             <div class="timer-card-label">
-                발작 시간
+                발작 지속시간
             </div>
 
             <div
-                id="timer"
                 class="main-timer"
+                id="timer"
             >
                 00:00
             </div>
 
             <div
-                id="timerStatus"
                 class="timer-status"
+                id="timerStatus"
             >
-                시작 버튼을 눌러 기록하세요.
+                시작 버튼을 눌러 기록을 시작하세요.
             </div>
 
 
             <div class="timer-buttons">
 
                 <button
-                    id="startButton"
+                    type="button"
                     class="start-button"
+                    id="startButton"
                 >
-                    발작 시작
+                    시작
                 </button>
 
                 <button
-                    id="stopButton"
+                    type="button"
                     class="stop-button"
+                    id="stopButton"
                     disabled
                 >
-                    발작 종료
+                    종료
                 </button>
 
             </div>
@@ -88,29 +89,13 @@
         </section>
 
 
-        <!-- 안내 -->
+        <!-- 기록 순서 -->
         <div class="record-guide">
-
-            <span>
-                ① 시작
-            </span>
-
-            <span>
-                →
-            </span>
-
-            <span>
-                ② 종료
-            </span>
-
-            <span>
-                →
-            </span>
-
-            <span>
-                ③ 내용 기록
-            </span>
-
+            <span>① 시작</span>
+            <span>→</span>
+            <span>② 종료</span>
+            <span>→</span>
+            <span>③ 내용 기록</span>
         </div>
 
 
@@ -120,14 +105,8 @@
             <div class="panel-heading">
 
                 <div>
-                    <h2>
-                        발작 유형
-                        <span class="required">*</span>
-                    </h2>
-
-                    <p>
-                        관찰된 형태를 선택하세요.
-                    </p>
+                    <h2>발작 유형</h2>
+                    <p>가장 가까운 유형을 선택하세요.</p>
                 </div>
 
                 <span class="required-label">
@@ -143,6 +122,7 @@
             >
 
                 <button
+                    type="button"
                     class="choice-button"
                     data-type="전신 경련"
                 >
@@ -150,6 +130,7 @@
                 </button>
 
                 <button
+                    type="button"
                     class="choice-button"
                     data-type="의식 소실"
                 >
@@ -157,6 +138,7 @@
                 </button>
 
                 <button
+                    type="button"
                     class="choice-button"
                     data-type="멍함 / 반응 저하"
                 >
@@ -164,6 +146,7 @@
                 </button>
 
                 <button
+                    type="button"
                     class="choice-button"
                     data-type="부분 경련"
                 >
@@ -171,6 +154,7 @@
                 </button>
 
                 <button
+                    type="button"
                     class="choice-button"
                     data-type="기타"
                 >
@@ -188,13 +172,8 @@
             <div class="panel-heading">
 
                 <div>
-                    <h2>
-                        관찰 사항
-                    </h2>
-
-                    <p>
-                        해당되는 내용을 모두 선택하세요.
-                    </p>
+                    <h2>관찰 사항</h2>
+                    <p>관찰된 내용을 선택하세요.</p>
                 </div>
 
                 <span class="optional-label">
@@ -210,6 +189,7 @@
             >
 
                 <button
+                    type="button"
                     class="choice-button"
                     data-observation="넘어짐"
                 >
@@ -217,6 +197,7 @@
                 </button>
 
                 <button
+                    type="button"
                     class="choice-button"
                     data-observation="호흡 이상"
                 >
@@ -224,6 +205,7 @@
                 </button>
 
                 <button
+                    type="button"
                     class="choice-button"
                     data-observation="침 흘림"
                 >
@@ -231,6 +213,7 @@
                 </button>
 
                 <button
+                    type="button"
                     class="choice-button"
                     data-observation="구토"
                 >
@@ -238,6 +221,7 @@
                 </button>
 
                 <button
+                    type="button"
                     class="choice-button"
                     data-observation="특이사항 없음"
                 >
@@ -255,13 +239,8 @@
             <div class="panel-heading">
 
                 <div>
-                    <h2>
-                        발작 후 상태
-                    </h2>
-
-                    <p>
-                        발작 종료 후 상태를 선택하세요.
-                    </p>
+                    <h2>발작 후 상태</h2>
+                    <p>발작이 끝난 후 상태를 선택하세요.</p>
                 </div>
 
                 <span class="optional-label">
@@ -277,6 +256,7 @@
             >
 
                 <button
+                    type="button"
                     class="choice-button"
                     data-after="바로 회복"
                 >
@@ -284,6 +264,7 @@
                 </button>
 
                 <button
+                    type="button"
                     class="choice-button"
                     data-after="졸림"
                 >
@@ -291,6 +272,7 @@
                 </button>
 
                 <button
+                    type="button"
                     class="choice-button"
                     data-after="혼란"
                 >
@@ -298,6 +280,7 @@
                 </button>
 
                 <button
+                    type="button"
                     class="choice-button"
                     data-after="평소와 다름"
                 >
@@ -315,13 +298,8 @@
             <div class="panel-heading">
 
                 <div>
-                    <h2>
-                        메모
-                    </h2>
-
-                    <p>
-                        추가로 기록할 내용이 있으면 입력하세요.
-                    </p>
+                    <h2>메모</h2>
+                    <p>추가로 기록할 내용이 있으면 입력하세요.</p>
                 </div>
 
                 <span class="optional-label">
@@ -333,7 +311,7 @@
 
             <textarea
                 id="memo"
-                placeholder="예: 식사 후 발생, 이동 중 발생 등"
+                placeholder="추가로 기록할 내용"
             ></textarea>
 
         </section>
@@ -343,6 +321,7 @@
         <section class="save-section">
 
             <button
+                type="button"
                 id="saveButton"
                 class="save-button"
                 disabled
@@ -351,7 +330,7 @@
             </button>
 
             <p class="save-help">
-                발작 종료와 발작 유형을 선택하면 저장할 수 있습니다.
+                발작 종료 후 유형을 선택하면 저장할 수 있습니다.
             </p>
 
         </section>
@@ -361,479 +340,7 @@
 </div>
 
 
-<script type="module">
-
-import {
-    collection,
-    addDoc,
-    Timestamp
-} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
-
-import { db } from "./js/firebase.js";
-
-
-/* ================================
-   상태
-================================ */
-
-let startTime = null;
-let endTime = null;
-let timerInterval = null;
-
-let selectedType = "";
-let selectedObservations = [];
-let selectedAfter = "";
-
-
-/* ================================
-   요소
-================================ */
-
-const timer =
-    document.getElementById("timer");
-
-const timerStatus =
-    document.getElementById("timerStatus");
-
-const startButton =
-    document.getElementById("startButton");
-
-const stopButton =
-    document.getElementById("stopButton");
-
-const saveButton =
-    document.getElementById("saveButton");
-
-
-/* ================================
-   타이머
-================================ */
-
-function updateTimer() {
-
-    if (!startTime) {
-        return;
-    }
-
-    const now = new Date();
-
-    const seconds =
-        Math.floor(
-            (now - startTime) / 1000
-        );
-
-    const minutes =
-        Math.floor(seconds / 60);
-
-    const remainSeconds =
-        seconds % 60;
-
-    timer.textContent =
-        `${String(minutes).padStart(2, "0")}:${String(
-            remainSeconds
-        ).padStart(2, "0")}`;
-}
-
-
-/* ================================
-   시작
-================================ */
-
-startButton.addEventListener(
-    "click",
-    () => {
-
-        startTime = new Date();
-        endTime = null;
-
-        timer.textContent = "00:00";
-
-        timerStatus.textContent =
-            "발작 진행 중";
-
-        timerStatus.classList.add(
-            "recording"
-        );
-
-        timerStatus.classList.remove(
-            "completed"
-        );
-
-        startButton.disabled = true;
-        stopButton.disabled = false;
-        saveButton.disabled = true;
-
-        timerInterval =
-            setInterval(
-                updateTimer,
-                1000
-            );
-
-    }
-);
-
-
-/* ================================
-   종료
-================================ */
-
-stopButton.addEventListener(
-    "click",
-    () => {
-
-        if (!startTime) {
-            return;
-        }
-
-        endTime = new Date();
-
-        clearInterval(
-            timerInterval
-        );
-
-        updateTimer();
-
-        timerStatus.textContent =
-            "발작 기록이 종료되었습니다.";
-
-        timerStatus.classList.remove(
-            "recording"
-        );
-
-        timerStatus.classList.add(
-            "completed"
-        );
-
-        stopButton.disabled = true;
-
-        validateSave();
-
-    }
-);
-
-
-/* ================================
-   발작 유형
-================================ */
-
-document
-    .querySelectorAll(
-        "#typeChoices .choice-button"
-    )
-    .forEach((button) => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                document
-                    .querySelectorAll(
-                        "#typeChoices .choice-button"
-                    )
-                    .forEach((item) => {
-
-                        item.classList.remove(
-                            "selected"
-                        );
-
-                    });
-
-                button.classList.add(
-                    "selected"
-                );
-
-                selectedType =
-                    button.dataset.type;
-
-                validateSave();
-
-            }
-        );
-
-    });
-
-
-/* ================================
-   관찰 사항
-================================ */
-
-document
-    .querySelectorAll(
-        "#observationChoices .choice-button"
-    )
-    .forEach((button) => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                const value =
-                    button.dataset.observation;
-
-                if (
-                    value ===
-                    "특이사항 없음"
-                ) {
-
-                    selectedObservations = [
-                        "특이사항 없음"
-                    ];
-
-                    document
-                        .querySelectorAll(
-                            "#observationChoices .choice-button"
-                        )
-                        .forEach((item) => {
-
-                            item.classList.remove(
-                                "selected"
-                            );
-
-                        });
-
-                    button.classList.add(
-                        "selected"
-                    );
-
-                    return;
-                }
-
-
-                document
-                    .querySelector(
-                        '#observationChoices [data-observation="특이사항 없음"]'
-                    )
-                    .classList.remove(
-                        "selected"
-                    );
-
-
-                selectedObservations =
-                    selectedObservations.filter(
-                        item =>
-                            item !==
-                            "특이사항 없음"
-                    );
-
-
-                if (
-                    selectedObservations.includes(
-                        value
-                    )
-                ) {
-
-                    selectedObservations =
-                        selectedObservations.filter(
-                            item =>
-                                item !== value
-                        );
-
-                    button.classList.remove(
-                        "selected"
-                    );
-
-                } else {
-
-                    selectedObservations.push(
-                        value
-                    );
-
-                    button.classList.add(
-                        "selected"
-                    );
-
-                }
-
-            }
-        );
-
-    });
-
-
-/* ================================
-   발작 후 상태
-================================ */
-
-document
-    .querySelectorAll(
-        "#afterChoices .choice-button"
-    )
-    .forEach((button) => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                document
-                    .querySelectorAll(
-                        "#afterChoices .choice-button"
-                    )
-                    .forEach((item) => {
-
-                        item.classList.remove(
-                            "selected"
-                        );
-
-                    });
-
-                button.classList.add(
-                    "selected"
-                );
-
-                selectedAfter =
-                    button.dataset.after;
-
-            }
-        );
-
-    });
-
-
-/* ================================
-   저장 가능 여부
-================================ */
-
-function validateSave() {
-
-    const canSave =
-        startTime &&
-        endTime &&
-        selectedType;
-
-    saveButton.disabled =
-        !canSave;
-
-}
-
-
-/* ================================
-   저장
-================================ */
-
-saveButton.addEventListener(
-    "click",
-    async () => {
-
-        if (
-            !startTime ||
-            !endTime ||
-            !selectedType
-        ) {
-
-            alert(
-                "발작 시간과 발작 유형을 확인해주세요."
-            );
-
-            return;
-        }
-
-
-        saveButton.disabled = true;
-
-        saveButton.textContent =
-            "저장 중...";
-
-
-        const durationSeconds =
-            Math.floor(
-                (endTime - startTime) / 1000
-            );
-
-
-        const record = {
-
-            startedAt:
-                Timestamp.fromDate(
-                    startTime
-                ),
-
-            endedAt:
-                Timestamp.fromDate(
-                    endTime
-                ),
-
-            duration:
-                durationSeconds,
-
-            type:
-                selectedType,
-
-            observations:
-                selectedObservations,
-
-            after:
-                selectedAfter,
-
-            memo:
-                document
-                    .getElementById("memo")
-                    .value
-                    .trim(),
-
-            createdAt:
-                Timestamp.now()
-
-        };
-
-
-        try {
-
-            await addDoc(
-                collection(
-                    db,
-                    "seizures"
-                ),
-                record
-            );
-
-            alert(
-                "발작 기록이 저장되었습니다."
-            );
-
-            location.href =
-                "index.html";
-
-        } catch (error) {
-
-            console.error(error);
-
-            alert(
-                "기록 저장에 실패했습니다."
-            );
-
-            saveButton.disabled = false;
-
-            saveButton.textContent =
-                "기록 저장";
-
-        }
-
-    }
-);
-
-
-/* ================================
-   페이지 이탈 방지
-================================ */
-
-window.addEventListener(
-    "beforeunload",
-    (event) => {
-
-        if (
-            startTime &&
-            !endTime
-        ) {
-
-            event.preventDefault();
-            event.returnValue = "";
-
-        }
-
-    }
-);
-
-</script>
+<script type="module" src="./js/record.js"></script>
 
 </body>
 </html>
