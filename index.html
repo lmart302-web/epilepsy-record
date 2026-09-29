@@ -10,6 +10,17 @@
     <title>발작 기록</title>
 
     <link rel="stylesheet" href="./css/style.css">
+
+    <style>
+        .today-card-header {
+            justify-content: center;
+            text-align: center;
+        }
+
+        .today-card-header > div {
+            width: 100%;
+        }
+    </style>
 </head>
 
 <body>
@@ -19,45 +30,24 @@
     <!-- 헤더 -->
     <header class="home-header">
 
-        <div>
-            <p class="home-label">오늘의 기록</p>
+    <div>
+        <p class="home-label">오늘의 기록</p>
+    </div>
 
-            <h1>
-                발작 기록
-            </h1>
-        </div>
+    <span
+        class="home-date"
+        id="todayDate"
+    >
+        9월 29일
+    </span>
 
-        <span
-            class="home-date"
-            id="todayDate"
-        >
-            9월 29일
-        </span>
-
-    </header>
+</header>
 
 
     <main>
 
         <!-- 오늘 현황 -->
         <section class="today-card">
-
-            <div class="today-card-header">
-
-                <div>
-
-                    <span class="today-card-label">
-                        오늘
-                    </span>
-
-                    <h2 id="todayMonth">
-                        2026년 9월
-                    </h2>
-
-                </div>
-
-            </div>
-
 
             <div class="summary-grid">
 
@@ -621,14 +611,6 @@ function updateTodayDate() {
         "todayDate"
     ).textContent =
         `${today.getMonth() + 1}월 ${today.getDate()}일`;
-
-
-    document.getElementById(
-        "todayMonth"
-    ).textContent =
-        `${today.getFullYear()}년 ${
-            today.getMonth() + 1
-        }월`;
 }
 
 

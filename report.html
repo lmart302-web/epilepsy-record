@@ -2,11 +2,373 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>발작 리포트</title>
 
     <link rel="stylesheet" href="./css/style.css">
+
+    <style>
+
+        /* ========================================
+           리포트 전체
+        ======================================== */
+
+        .report-page {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding-bottom: 40px;
+        }
+
+
+        /* ========================================
+           월 선택
+        ======================================== */
+
+        .period-selector {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 52px;
+            margin-bottom: 2px;
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .period-selector strong {
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .period-selector button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border: 0;
+            border-radius: 50%;
+            background: #f3f4f6;
+            color: #333;
+            font-size: 27px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .period-selector button:first-child {
+            left: 8px;
+        }
+
+        .period-selector button:last-child {
+            right: 8px;
+        }
+
+
+        /* ========================================
+           리포트 영역
+        ======================================== */
+
+        .report-section {
+            margin: 0;
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 18px;
+            box-sizing: border-box;
+        }
+
+        .report-section h2 {
+            margin: 0 0 18px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eceef0;
+            font-size: 17px;
+            font-weight: 700;
+            color: #222;
+        }
+
+
+        /* ========================================
+           월간 요약
+        ======================================== */
+
+        .report-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .report-stat {
+            min-width: 0;
+            padding: 13px 8px;
+            border-radius: 12px;
+            background: #f6f7f8;
+            text-align: center;
+        }
+
+        .report-stat span {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 12px;
+            color: #777;
+        }
+
+        .report-stat strong {
+            display: block;
+            font-size: 15px;
+            color: #222;
+        }
+
+
+        /* ========================================
+           시간대 / 유형 그래프
+        ======================================== */
+
+        .time-bar-row,
+        .type-bar-row {
+            margin-bottom: 16px;
+        }
+
+        .time-bar-row:last-child,
+        .type-bar-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .time-bar-label,
+        .type-bar-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 7px;
+            font-size: 13px;
+        }
+
+        .time-bar-label span,
+        .type-bar-label span {
+            color: #444;
+        }
+
+        .time-bar-label strong,
+        .type-bar-label strong {
+            color: #222;
+            font-size: 13px;
+        }
+
+        .time-bar-background,
+        .type-bar-background {
+            width: 100%;
+            height: 9px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: #edf0f2;
+        }
+
+        .time-bar-fill,
+        .type-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: #444;
+        }
+
+
+        /* ========================================
+           날짜별 발생
+        ======================================== */
+
+        .daily-record {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 2px;
+            border-bottom: 1px solid #f0f1f2;
+        }
+
+        .daily-record:first-child {
+            padding-top: 0;
+        }
+
+        .daily-record:last-child {
+            padding-bottom: 0;
+            border-bottom: 0;
+        }
+
+        .daily-record span {
+            font-size: 14px;
+            color: #444;
+        }
+
+        .daily-record strong {
+            font-size: 14px;
+            color: #222;
+        }
+
+
+        /* ========================================
+           상세 기록
+        ======================================== */
+
+        .detail-section-toggle {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .detail-section-toggle h2 {
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+
+        #detailSectionArrow {
+            font-size: 18px;
+            color: #888;
+            transition: transform 0.2s ease;
+        }
+
+        .detail-section.open #detailSectionArrow {
+            transform: rotate(180deg);
+        }
+
+        .detail-records-hidden {
+            display: none;
+            margin-top: 18px;
+        }
+
+        .detail-section.open .detail-records-hidden {
+            display: block;
+        }
+
+        .detail-record {
+            margin-bottom: 12px;
+            padding: 14px;
+            border: 1px solid #e3e6e8;
+            border-radius: 13px;
+            background: #fff;
+        }
+
+        .detail-record:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-record-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .detail-record-date {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-record-date strong {
+            font-size: 14px;
+        }
+
+        .detail-record-date span {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .detail-record-duration {
+            flex-shrink: 0;
+        }
+
+        .detail-record-duration strong {
+            font-size: 14px;
+        }
+
+        .detail-record-info > div {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 10px 0;
+            border-top: 1px solid #f3f4f5;
+        }
+
+        .detail-record-info > div:first-child {
+            border-top: 1px solid #f0f1f2;
+        }
+
+        .detail-record-info span {
+            flex-shrink: 0;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .detail-record-info strong {
+            font-size: 13px;
+            font-weight: 600;
+            text-align: right;
+            word-break: break-word;
+        }
+
+
+        /* ========================================
+           기록 없음
+        ======================================== */
+
+        .report-empty {
+            padding: 18px 0;
+            text-align: center;
+            font-size: 13px;
+            color: #888;
+        }
+
+
+        /* ========================================
+           모바일
+        ======================================== */
+
+        @media (max-width: 400px) {
+
+            .report-section {
+                padding: 17px;
+            }
+
+            .report-stats {
+                gap: 6px;
+            }
+
+            .report-stat {
+                padding: 12px 5px;
+            }
+
+            .report-stat span {
+                font-size: 11px;
+            }
+
+            .report-stat strong {
+                font-size: 14px;
+            }
+
+            .detail-record-date {
+                gap: 6px;
+            }
+
+            .detail-record-date strong {
+                font-size: 13px;
+            }
+
+        }
+
+    </style>
+
 </head>
 
 <body>
@@ -23,7 +385,9 @@
             ←
         </button>
 
-        <h1>발작 리포트</h1>
+        <h1>
+            발작 리포트
+        </h1>
 
     </header>
 
@@ -33,7 +397,11 @@
         <!-- 월 선택 -->
         <section class="period-selector">
 
-            <button id="prevMonth">
+            <button
+                id="prevMonth"
+                type="button"
+                aria-label="이전 달"
+            >
                 ‹
             </button>
 
@@ -41,7 +409,11 @@
                 2026년 9월
             </strong>
 
-            <button id="nextMonth">
+            <button
+                id="nextMonth"
+                type="button"
+                aria-label="다음 달"
+            >
                 ›
             </button>
 
@@ -51,23 +423,48 @@
         <!-- 월간 요약 -->
         <section class="report-section">
 
-            <h2>월간 요약</h2>
+            <h2>
+                월간 요약
+            </h2>
 
             <div class="report-stats">
 
                 <div class="report-stat">
-                    <span>발작 횟수</span>
-                    <strong id="totalCount">0회</strong>
+
+                    <span>
+                        발작 횟수
+                    </span>
+
+                    <strong id="totalCount">
+                        0회
+                    </strong>
+
                 </div>
 
-                <div class="report-stat">
-                    <span>평균 지속시간</span>
-                    <strong id="averageDuration">0초</strong>
-                </div>
 
                 <div class="report-stat">
-                    <span>가장 긴 발작</span>
-                    <strong id="longestDuration">0초</strong>
+
+                    <span>
+                        평균 지속시간
+                    </span>
+
+                    <strong id="averageDuration">
+                        0초
+                    </strong>
+
+                </div>
+
+
+                <div class="report-stat">
+
+                    <span>
+                        가장 긴 발작
+                    </span>
+
+                    <strong id="longestDuration">
+                        0초
+                    </strong>
+
                 </div>
 
             </div>
@@ -78,7 +475,9 @@
         <!-- 시간대별 발생 -->
         <section class="report-section">
 
-            <h2>시간대별 발생</h2>
+            <h2>
+                시간대별 발생
+            </h2>
 
             <div id="timeBars"></div>
 
@@ -88,7 +487,9 @@
         <!-- 발작 유형별 발생 -->
         <section class="report-section">
 
-            <h2>발작 유형별 발생</h2>
+            <h2>
+                발작 유형별 발생
+            </h2>
 
             <div id="typeBars"></div>
 
@@ -98,7 +499,9 @@
         <!-- 날짜별 발생 -->
         <section class="report-section">
 
-            <h2>날짜별 발생</h2>
+            <h2>
+                날짜별 발생
+            </h2>
 
             <div id="dailyRecords"></div>
 
@@ -106,11 +509,26 @@
 
 
         <!-- 상세 기록 -->
-        <section class="report-section">
+        <section class="report-section detail-section">
 
-            <h2>상세 기록</h2>
+            <button
+                type="button"
+                class="detail-section-toggle"
+                id="detailSectionToggle"
+            >
+                <h2>
+                    상세 기록
+                </h2>
 
-            <div id="detailRecords"></div>
+                <span id="detailSectionArrow">
+                    ↓
+                </span>
+            </button>
+
+            <div
+                id="detailRecords"
+                class="detail-records-hidden"
+            ></div>
 
         </section>
 
@@ -135,9 +553,9 @@ import { db } from "./js/firebase.js";
 let currentDate = new Date();
 
 
-/* --------------------------------
+/* ========================================
    시간 표시
--------------------------------- */
+======================================== */
 
 function formatDuration(seconds) {
 
@@ -145,43 +563,36 @@ function formatDuration(seconds) {
         return "0초";
     }
 
-
     const minutes =
         Math.floor(seconds / 60);
 
-
     const remainSeconds =
         seconds % 60;
-
 
     if (minutes === 0) {
         return `${remainSeconds}초`;
     }
 
-
     if (remainSeconds === 0) {
         return `${minutes}분`;
     }
-
 
     return `${minutes}분 ${remainSeconds}초`;
 
 }
 
 
-/* --------------------------------
+/* ========================================
    월 표시
--------------------------------- */
+======================================== */
 
 function updateMonthTitle() {
 
     const year =
         currentDate.getFullYear();
 
-
     const month =
         currentDate.getMonth() + 1;
-
 
     document.getElementById(
         "currentMonth"
@@ -191,9 +602,24 @@ function updateMonthTitle() {
 }
 
 
-/* --------------------------------
+/* ========================================
+   상세 기록 열기 / 닫기
+======================================== */
+
+document
+    .getElementById("detailSectionToggle")
+    .addEventListener("click", () => {
+
+        document
+            .querySelector(".detail-section")
+            .classList.toggle("open");
+
+    });
+
+
+/* ========================================
    리포트 불러오기
--------------------------------- */
+======================================== */
 
 async function loadReport() {
 
@@ -202,7 +628,6 @@ async function loadReport() {
 
     const year =
         currentDate.getFullYear();
-
 
     const month =
         currentDate.getMonth();
@@ -297,9 +722,9 @@ async function loadReport() {
 }
 
 
-/* --------------------------------
+/* ========================================
    월간 요약
--------------------------------- */
+======================================== */
 
 function updateSummary(records) {
 
@@ -368,9 +793,9 @@ function updateSummary(records) {
 }
 
 
-/* --------------------------------
+/* ========================================
    시간대별 발생
--------------------------------- */
+======================================== */
 
 function updateTimeBars(records) {
 
@@ -498,9 +923,9 @@ function updateTimeBars(records) {
 }
 
 
-/* --------------------------------
+/* ========================================
    발작 유형별 발생
--------------------------------- */
+======================================== */
 
 function updateTypeBars(records) {
 
@@ -628,9 +1053,9 @@ function updateTypeBars(records) {
 }
 
 
-/* --------------------------------
+/* ========================================
    날짜별 발생
--------------------------------- */
+======================================== */
 
 function updateDailyRecords(records) {
 
@@ -731,9 +1156,9 @@ function updateDailyRecords(records) {
 }
 
 
-/* --------------------------------
+/* ========================================
    상세 기록
--------------------------------- */
+======================================== */
 
 function updateDetailRecords(records) {
 
@@ -802,8 +1227,7 @@ function updateDetailRecords(records) {
 
 
             const dateText =
-                `${start.getMonth() + 1}월
-                 ${start.getDate()}일`;
+                `${start.getMonth() + 1}월 ${start.getDate()}일`;
 
 
             const item =
@@ -820,7 +1244,7 @@ function updateDetailRecords(records) {
 
                 <div class="detail-record-top">
 
-                    <div>
+                    <div class="detail-record-date">
 
                         <strong>
                             ${dateText}
@@ -833,11 +1257,15 @@ function updateDetailRecords(records) {
                     </div>
 
 
-                    <strong>
-                        ${formatDuration(
-                            record.duration || 0
-                        )}
-                    </strong>
+                    <div class="detail-record-duration">
+
+                        <strong>
+                            ${formatDuration(
+                                record.duration || 0
+                            )}
+                        </strong>
+
+                    </div>
 
                 </div>
 
@@ -916,9 +1344,9 @@ function updateDetailRecords(records) {
 }
 
 
-/* --------------------------------
+/* ========================================
    이전 달
--------------------------------- */
+======================================== */
 
 document
     .getElementById(
@@ -932,16 +1360,15 @@ document
                 currentDate.getMonth() - 1
             );
 
-
             loadReport();
 
         }
     );
 
 
-/* --------------------------------
+/* ========================================
    다음 달
--------------------------------- */
+======================================== */
 
 document
     .getElementById(
@@ -955,16 +1382,15 @@ document
                 currentDate.getMonth() + 1
             );
 
-
             loadReport();
 
         }
     );
 
 
-/* --------------------------------
+/* ========================================
    시작
--------------------------------- */
+======================================== */
 
 loadReport();
 
@@ -972,3 +1398,4 @@ loadReport();
 
 </body>
 </html>
+
