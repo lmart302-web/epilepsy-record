@@ -95,7 +95,7 @@ async function loadTodayRecords() {
 }
 
 /* ========================================
-   마지막 발작
+   마지막 증상
 ======================================== */
 async function loadLastRecord() {
     const container = document.getElementById("lastRecord");
@@ -113,7 +113,7 @@ async function loadLastRecord() {
         if (snapshot.empty) {
             container.innerHTML = `
                 <div class="empty-state">
-                    아직 기록된 발작이 없습니다.
+                    아직 기록된 증상이 없습니다.
                 </div>
             `;
             return;
@@ -134,7 +134,7 @@ async function loadLastRecord() {
             </div>
             <div class="recent-record-info">
                 <strong>${data.type || "기록 없음"}</strong>
-                <span>${data.after || "발작 후 상태 미기록"}</span>
+                <span>${data.after || "증상 후 상태 미기록"}</span>
             </div>
             <div class="recent-record-duration">
                 <strong>${formatDuration(data.duration || 0)}</strong>
@@ -148,7 +148,7 @@ async function loadLastRecord() {
 
         container.appendChild(record);
     } catch (error) {
-        console.error("마지막 발작 불러오기 실패:", error);
+        console.error("마지막 증상 불러오기 실패:", error);
         container.innerHTML = `
             <div class="empty-state">
                 기록을 불러오지 못했습니다.
@@ -168,7 +168,7 @@ function openRecordModal(id, data) {
     const end = data.endedAt ? data.endedAt.toDate() : null;
     const observations = Array.isArray(data.observations) ? data.observations.join(", ") : "-";
 
-    document.getElementById("modalTitle").textContent = "발작 기록";
+    document.getElementById("modalTitle").textContent = "증상 기록";
     document.getElementById("modalView").style.display = "block";
     document.getElementById("modalEdit").style.display = "none";
 
@@ -188,7 +188,7 @@ function openRecordModal(id, data) {
                 <strong>${formatDuration(data.duration || 0)}</strong>
             </div>
             <div class="modal-info-row">
-                <span>발작 유형</span>
+                <span>증상 유형</span>
                 <strong>${data.type || "-"}</strong>
             </div>
             <div class="modal-info-row">
@@ -196,7 +196,7 @@ function openRecordModal(id, data) {
                 <strong>${observations}</strong>
             </div>
             <div class="modal-info-row">
-                <span>발작 후 상태</span>
+                <span>증상 후 상태</span>
                 <strong>${data.after || "-"}</strong>
             </div>
             ${
@@ -300,7 +300,7 @@ document.getElementById("editRecordButton").addEventListener("click", openEditMo
 ======================================== */
 document.getElementById("saveEditButton").addEventListener("click", async () => {
     if (!selectedRecordId || !editType) {
-        alert("발작 유형을 선택해주세요.");
+        alert("증상 유형을 선택해주세요.");
         return;
     }
 
@@ -333,7 +333,7 @@ document.getElementById("saveEditButton").addEventListener("click", async () => 
    수정 취소
 ======================================== */
 document.getElementById("cancelEditButton").addEventListener("click", () => {
-    document.getElementById("modalTitle").textContent = "발작 기록";
+    document.getElementById("modalTitle").textContent = "증상 기록";
     document.getElementById("modalView").style.display = "block";
     document.getElementById("modalEdit").style.display = "none";
 });

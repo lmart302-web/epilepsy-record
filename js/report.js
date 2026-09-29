@@ -225,7 +225,7 @@ function updateTimeBars(records) {
 
 
 /* ========================================
-   발작 유형
+   증상 유형
 ======================================== */
 
 function updateTypeBars(records) {
@@ -535,7 +535,7 @@ function updateDetailRecords(records) {
                 <div>
 
                     <span>
-                        발작 유형
+                        증상 유형
                     </span>
 
                     <strong>
@@ -548,7 +548,7 @@ function updateDetailRecords(records) {
                 <div>
 
                     <span>
-                        발작 후 상태
+                        증상 후 상태
                     </span>
 
                     <strong>

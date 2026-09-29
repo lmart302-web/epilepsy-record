@@ -164,7 +164,7 @@ endInput.addEventListener(
 
 
 /* ========================================
-   발작 유형
+   증상 유형
 ======================================== */
 
 document
@@ -258,7 +258,7 @@ document
 
 
 /* ========================================
-   발작 후 상태
+   증상 후 상태
 ======================================== */
 
 document
@@ -314,7 +314,7 @@ saveButton.addEventListener(
         if (!selectedType) {
 
             alert(
-                "발작 유형을 선택해주세요."
+                "증상 유형을 선택해주세요."
             );
 
             return;
@@ -407,7 +407,7 @@ saveButton.addEventListener(
 
 
             alert(
-                "발작 기록이 저장되었습니다."
+                "증상 기록이 저장되었습니다."
             );
 
 
@@ -429,7 +429,7 @@ saveButton.addEventListener(
             saveButton.disabled = false;
 
             saveButton.textContent =
-                "지난 발작 기록 저장";
+                "지난 증상 기록 저장";
         }
 
     }

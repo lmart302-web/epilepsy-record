@@ -62,7 +62,7 @@ startButton.addEventListener("click", () => {
     stopButton.disabled = false;
     saveButton.disabled = true;
 
-    timerStatus.textContent = "발작 기록 중...";
+    timerStatus.textContent = "증상 기록 중...";
     timerStatus.classList.add("recording");
     timerStatus.classList.remove("completed");
 
@@ -101,7 +101,7 @@ stopButton.addEventListener("click", () => {
 
 
 /* ========================================
-   발작 유형
+   증상 유형
 ======================================== */
 
 document
@@ -185,7 +185,7 @@ document
 
 
 /* ========================================
-   발작 후 상태
+   증상 후 상태
 ======================================== */
 
 document
@@ -276,13 +276,13 @@ saveButton.addEventListener("click", async () => {
             record
         );
 
-        alert("발작 기록이 저장되었습니다.");
+        alert("증상 기록이 저장되었습니다.");
 
         location.href = "index.html";
 
     } catch (error) {
 
-        console.error("발작 기록 저장 실패:", error);
+        console.error("증상 기록 저장 실패:", error);
 
         alert(
             "기록 저장에 실패했습니다.\n잠시 후 다시 시도해주세요."

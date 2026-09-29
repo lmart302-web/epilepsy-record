@@ -7,7 +7,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>발작 기록</title>
+    <title>증상 기록</title>
 
     <link rel="stylesheet" href="./css/style.css">
 </head>
@@ -41,7 +41,7 @@
             <div class="summary-grid">
 
                 <div class="summary-item">
-                    <span>발작</span>
+                    <span>증상</span>
                     <strong id="todayCount">0회</strong>
                 </div>
 
@@ -51,7 +51,7 @@
                 </div>
 
                 <div class="summary-item">
-                    <span>가장 긴 발작</span>
+                    <span>가장 긴 증상</span>
                     <strong id="todayLongest">0초</strong>
                 </div>
 
@@ -60,7 +60,7 @@
         </section>
 
 
-        <!-- 발작 기록 -->
+        <!-- 증상 기록 -->
         <section class="record-start-section">
 
             <div class="record-actions">
@@ -79,11 +79,11 @@
                     <span class="record-main-text">
 
                         <strong>
-                            발작 기록 시작
+                            증상 기록 시작
                         </strong>
 
                         <small>
-                            지금 발작이 시작되면
+                            지금 증상이 시작되면
                         </small>
 
                     </span>
@@ -95,7 +95,7 @@
                 </button>
 
 
-                <!-- 지난 발작 수동 입력 -->
+                <!-- 지난 증상 수동 입력 -->
                 <button
                     type="button"
                     class="manual-record-button"
@@ -109,7 +109,7 @@
                     <span>
 
                         <strong>
-                            지난 발작 수동 입력
+                            지난 증상 수동 입력
                         </strong>
 
                         <small>
@@ -125,7 +125,7 @@
         </section>
 
 
-        <!-- 마지막 발작 -->
+        <!-- 마지막 증상 -->
         <section class="recent-section">
 
             <div class="section-header">
@@ -137,7 +137,7 @@
                     </span>
 
                     <h2>
-                        마지막 발작
+                        마지막 증상
                     </h2>
 
                 </div>
@@ -156,7 +156,7 @@
             <div id="lastRecord">
 
                 <div class="empty-state">
-                    아직 기록된 발작이 없습니다.
+                    아직 기록된 증상이 없습니다.
                 </div>
 
             </div>
@@ -178,7 +178,7 @@
                 </strong>
 
                 <p>
-                    발작이 시작되면 기록을 시작하고,
+                    증상이 시작되면 기록을 시작하고,
                     종료 후 관찰된 내용을 선택해 주세요.
                     놓친 경우에는 수동으로 입력할 수 있습니다.
                 </p>
@@ -213,7 +213,7 @@
                 </span>
 
                 <h2 id="modalTitle">
-                    발작 기록
+                    증상 기록
                 </h2>
 
             </div>
@@ -264,10 +264,10 @@
             class="modal-edit"
         >
 
-            <!-- 발작 유형 -->
+            <!-- 증상 유형 -->
             <div class="edit-section">
 
-                <h3>발작 유형</h3>
+                <h3>증상 유형</h3>
 
                 <div
                     class="edit-choice-grid"
@@ -374,10 +374,10 @@
             </div>
 
 
-            <!-- 발작 후 상태 -->
+            <!-- 증상 후 상태 -->
             <div class="edit-section">
 
-                <h3>발작 후 상태</h3>
+                <h3>증상 후 상태</h3>
 
                 <div
                     class="edit-choice-grid"
