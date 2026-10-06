@@ -144,32 +144,51 @@ function updateTimeBars(records) {
 
 
     const timeRanges = [
-        { label: "09시 ~ 10시", start: 9 },
-        { label: "10시 ~ 11시", start: 10 },
-        { label: "11시 ~ 12시", start: 11 },
-        { label: "12시 ~ 13시", start: 12 },
-        { label: "13시 ~ 14시", start: 13 },
-        { label: "14시 ~ 15시", start: 14 },
-        { label: "15시 ~ 16시", start: 15 }
-    ];
+    { label: "10:00 ~ 10:30", hour: 10, minute: 0 },
+    { label: "10:30 ~ 11:00", hour: 10, minute: 30 },
+    { label: "11:00 ~ 11:30", hour: 11, minute: 0 },
+    { label: "11:30 ~ 12:00", hour: 11, minute: 30 },
+    { label: "12:00 ~ 12:30", hour: 12, minute: 0 },
+    { label: "12:30 ~ 13:00", hour: 12, minute: 30 },
+    { label: "13:00 ~ 13:30", hour: 13, minute: 0 },
+    { label: "13:30 ~ 14:00", hour: 13, minute: 30 },
+    { label: "14:00 ~ 14:30", hour: 14, minute: 0 },
+    { label: "14:30 ~ 15:00", hour: 14, minute: 30 },
+    { label: "15:00 ~ 15:30", hour: 15, minute: 0 }
+];
 
 
-    const counts =
-        timeRanges.map(range => {
+const counts =
+    timeRanges.map(range => {
 
-            return records.filter(record => {
+        return records.filter(record => {
 
-                const date =
-                    getRecordDate(record.startedAt);
+            const date =
+                getRecordDate(record.startedAt);
 
-                if (!date) {
-                    return false;
-                }
+            if (!date) {
+                return false;
+            }
 
-                return date.getHours() === range.start;
-            }).length;
+            const recordMinutes =
+                date.getHours() * 60 + date.getMinutes();
 
-        });
+            const rangeStartMinutes =
+                range.hour * 60 + range.minute;
+
+            const rangeEndMinutes =
+                rangeStartMinutes + 30;
+
+            return (
+                recordMinutes >= rangeStartMinutes &&
+                recordMinutes < rangeEndMinutes
+            );
+
+        }).length;
+
+    });
+
+        
 
 
     const maxCount =

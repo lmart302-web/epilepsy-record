@@ -9,6 +9,7 @@ import { db } from "./firebase.js";
 
 let selectedType = "";
 let selectedObservations = [];
+let selectedOccurrence = "";
 let selectedAfter = "";
 
 
@@ -54,9 +55,13 @@ function formatDate(date) {
 
 
 function formatTime(date) {
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    
+
+    const hours =
+        String(date.getHours()).padStart(2, "0");
+
+    const minutes =
+        String(date.getMinutes()).padStart(2, "0");
+
     return `${hours}:${minutes}`;
 }
 
@@ -71,16 +76,22 @@ function formatDuration(seconds) {
         return "0초";
     }
 
-    const minutes = Math.floor(seconds / 60);
-    const remainSeconds = seconds % 60;
+    const minutes =
+        Math.floor(seconds / 60);
+
+    const remainSeconds =
+        seconds % 60;
+
 
     if (minutes === 0) {
         return `${remainSeconds}초`;
     }
 
+
     if (remainSeconds === 0) {
         return `${minutes}분`;
     }
+
 
     return `${minutes}분 ${remainSeconds}초`;
 }
@@ -95,7 +106,8 @@ function updateDuration() {
 
     if (!date || !start || !end) {
 
-        durationPreview.textContent = "미입력";
+        durationPreview.textContent =
+            "미입력";
 
         return;
     }
@@ -155,6 +167,7 @@ endInput.addEventListener(
 
 /* ========================================
    증상 유형
+   하나만 선택
 ======================================== */
 
 document
@@ -164,12 +177,16 @@ document
         button.addEventListener("click", () => {
 
             document
-                .querySelectorAll("#typeChoices .choice-button")
+                .querySelectorAll(
+                    "#typeChoices .choice-button"
+                )
                 .forEach(item => {
                     item.classList.remove("selected");
                 });
 
+
             button.classList.add("selected");
+
 
             selectedType =
                 button.dataset.value;
@@ -180,6 +197,7 @@ document
 
 /* ========================================
    관찰 사항
+   여러 개 선택 가능
 ======================================== */
 
 document
@@ -190,31 +208,6 @@ document
 
             const value =
                 button.dataset.value;
-
-
-            if (value === "특이사항 없음") {
-
-                selectedObservations = [
-                    "특이사항 없음"
-                ];
-
-                document
-                    .querySelectorAll("#observationChoices .choice-button")
-                    .forEach(item => {
-                        item.classList.remove("selected");
-                    });
-
-                button.classList.add("selected");
-
-                return;
-            }
-
-
-            selectedObservations =
-                selectedObservations.filter(
-                    item =>
-                        item !== "특이사항 없음"
-                );
 
 
             const index =
@@ -248,7 +241,38 @@ document
 
 
 /* ========================================
+   발생 시점
+   하나만 선택
+======================================== */
+
+document
+    .querySelectorAll("#occurrenceChoices .choice-button")
+    .forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            document
+                .querySelectorAll(
+                    "#occurrenceChoices .choice-button"
+                )
+                .forEach(item => {
+                    item.classList.remove("selected");
+                });
+
+
+            button.classList.add("selected");
+
+
+            selectedOccurrence =
+                button.dataset.value;
+        });
+
+    });
+
+
+/* ========================================
    증상 후 상태
+   하나만 선택
 ======================================== */
 
 document
@@ -258,12 +282,16 @@ document
         button.addEventListener("click", () => {
 
             document
-                .querySelectorAll("#afterChoices .choice-button")
+                .querySelectorAll(
+                    "#afterChoices .choice-button"
+                )
                 .forEach(item => {
                     item.classList.remove("selected");
                 });
 
+
             button.classList.add("selected");
+
 
             selectedAfter =
                 button.dataset.value;
@@ -283,6 +311,7 @@ saveButton.addEventListener(
         const date = dateInput.value;
         const start = startInput.value;
         const end = endInput.value;
+
 
         const memo =
             document
@@ -371,6 +400,9 @@ saveButton.addEventListener(
             observations:
                 selectedObservations,
 
+            occurrence:
+                selectedOccurrence,
+
             after:
                 selectedAfter,
 
@@ -385,7 +417,8 @@ saveButton.addEventListener(
 
 
         saveButton.disabled = true;
-        saveButton.textContent = "저장 중...";
+        saveButton.textContent =
+            "저장 중...";
 
 
         try {
@@ -424,3 +457,4 @@ saveButton.addEventListener(
 
     }
 );
+

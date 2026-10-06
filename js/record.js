@@ -13,6 +13,7 @@ let timerInterval = null;
 
 let selectedType = "";
 let selectedObservations = [];
+let selectedOccurrence = "";
 let selectedAfter = "";
 
 
@@ -128,6 +129,7 @@ document
 
 /* ========================================
    관찰 사항
+   여러 개 선택 가능
 ======================================== */
 
 document
@@ -137,31 +139,6 @@ document
         button.addEventListener("click", () => {
 
             const value = button.dataset.observation;
-
-
-            if (value === "특이사항 없음") {
-
-                selectedObservations = [
-                    "특이사항 없음"
-                ];
-
-                document
-                    .querySelectorAll("#observationChoices .choice-button")
-                    .forEach(item => {
-                        item.classList.remove("selected");
-                    });
-
-                button.classList.add("selected");
-
-                return;
-            }
-
-
-            selectedObservations =
-                selectedObservations.filter(
-                    item => item !== "특이사항 없음"
-                );
-
 
             const index =
                 selectedObservations.indexOf(value);
@@ -185,7 +162,35 @@ document
 
 
 /* ========================================
+   발생 시점
+   하나만 선택
+======================================== */
+
+document
+    .querySelectorAll("#occurrenceChoices .choice-button")
+    .forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            document
+                .querySelectorAll("#occurrenceChoices .choice-button")
+                .forEach(item => {
+                    item.classList.remove("selected");
+                });
+
+            button.classList.add("selected");
+
+            selectedOccurrence =
+                button.dataset.occurrence;
+
+        });
+
+    });
+
+
+/* ========================================
    증상 후 상태
+   하나만 선택
 ======================================== */
 
 document
@@ -202,7 +207,8 @@ document
 
             button.classList.add("selected");
 
-            selectedAfter = button.dataset.after;
+            selectedAfter =
+                button.dataset.after;
 
         });
 
@@ -250,6 +256,9 @@ saveButton.addEventListener("click", async () => {
 
         observations:
             selectedObservations,
+
+        occurrence:
+            selectedOccurrence,
 
         after:
             selectedAfter,
@@ -308,3 +317,4 @@ window.addEventListener("beforeunload", event => {
     }
 
 });
+
