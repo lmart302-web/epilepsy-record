@@ -78,6 +78,25 @@ function getRecordDate(value) {
 
 
 /* ========================================
+   날짜 키
+   예: 2026-10-06
+======================================== */
+
+function getDateKey(date) {
+
+    if (!date) {
+        return "";
+    }
+
+    return `${date.getFullYear()}-${String(
+        date.getMonth() + 1
+    ).padStart(2, "0")}-${String(
+        date.getDate()
+    ).padStart(2, "0")}`;
+}
+
+
+/* ========================================
    월 제목
 ======================================== */
 
@@ -144,51 +163,49 @@ function updateTimeBars(records) {
 
 
     const timeRanges = [
-    { label: "10:00 ~ 10:30", hour: 10, minute: 0 },
-    { label: "10:30 ~ 11:00", hour: 10, minute: 30 },
-    { label: "11:00 ~ 11:30", hour: 11, minute: 0 },
-    { label: "11:30 ~ 12:00", hour: 11, minute: 30 },
-    { label: "12:00 ~ 12:30", hour: 12, minute: 0 },
-    { label: "12:30 ~ 13:00", hour: 12, minute: 30 },
-    { label: "13:00 ~ 13:30", hour: 13, minute: 0 },
-    { label: "13:30 ~ 14:00", hour: 13, minute: 30 },
-    { label: "14:00 ~ 14:30", hour: 14, minute: 0 },
-    { label: "14:30 ~ 15:00", hour: 14, minute: 30 },
-    { label: "15:00 ~ 15:30", hour: 15, minute: 0 }
-];
+        { label: "10:00 ~ 10:30", hour: 10, minute: 0 },
+        { label: "10:30 ~ 11:00", hour: 10, minute: 30 },
+        { label: "11:00 ~ 11:30", hour: 11, minute: 0 },
+        { label: "11:30 ~ 12:00", hour: 11, minute: 30 },
+        { label: "12:00 ~ 12:30", hour: 12, minute: 0 },
+        { label: "12:30 ~ 13:00", hour: 12, minute: 30 },
+        { label: "13:00 ~ 13:30", hour: 13, minute: 0 },
+        { label: "13:30 ~ 14:00", hour: 13, minute: 30 },
+        { label: "14:00 ~ 14:30", hour: 14, minute: 0 },
+        { label: "14:30 ~ 15:00", hour: 14, minute: 30 },
+        { label: "15:00 ~ 15:30", hour: 15, minute: 0 }
+    ];
 
 
-const counts =
-    timeRanges.map(range => {
+    const counts =
+        timeRanges.map(range => {
 
-        return records.filter(record => {
+            return records.filter(record => {
 
-            const date =
-                getRecordDate(record.startedAt);
+                const date =
+                    getRecordDate(record.startedAt);
 
-            if (!date) {
-                return false;
-            }
+                if (!date) {
+                    return false;
+                }
 
-            const recordMinutes =
-                date.getHours() * 60 + date.getMinutes();
+                const recordMinutes =
+                    date.getHours() * 60 + date.getMinutes();
 
-            const rangeStartMinutes =
-                range.hour * 60 + range.minute;
+                const rangeStartMinutes =
+                    range.hour * 60 + range.minute;
 
-            const rangeEndMinutes =
-                rangeStartMinutes + 30;
+                const rangeEndMinutes =
+                    rangeStartMinutes + 30;
 
-            return (
-                recordMinutes >= rangeStartMinutes &&
-                recordMinutes < rangeEndMinutes
-            );
+                return (
+                    recordMinutes >= rangeStartMinutes &&
+                    recordMinutes < rangeEndMinutes
+                );
 
-        }).length;
+            }).length;
 
-    });
-
-        
+        });
 
 
     const maxCount =
@@ -240,6 +257,496 @@ const counts =
 
         container.appendChild(row);
     });
+}
+
+
+/* ========================================
+   오후 수면과 증상 비교
+======================================== */
+
+
+function updateSleepComparison(
+    records,
+    dailyRecords
+) {
+
+    const container =
+        document.getElementById("sleepComparison");
+
+    container.innerHTML = "";
+
+
+    /*
+        수면 기록이 실제로 존재하는 날짜만
+        비교 대상으로 사용한다.
+
+        true  = 수면함
+        false = 수면하지 않음
+    */
+
+    const sleepDays = {
+        slept: [],
+        didNotSleep: []
+    };
+
+
+    dailyRecords.forEach(record => {
+
+        const dateKey =
+            record.date;
+
+        if (!dateKey) {
+            return;
+        }
+
+
+        if (record.postLunchSleep === true) {
+
+            sleepDays.slept.push(dateKey);
+
+        } else if (
+            record.postLunchSleep === false
+        ) {
+
+            sleepDays.didNotSleep.push(dateKey);
+        }
+    });
+
+
+    /*
+        날짜별로 13시 이후 증상을 묶는다.
+    */
+
+    const afternoonRecordsByDate = {};
+
+
+    records.forEach(record => {
+
+        const date =
+            getRecordDate(record.startedAt);
+
+        if (!date) {
+            return;
+        }
+
+
+        const hour =
+            date.getHours();
+
+
+        /*
+            13:00 이후만 오후 증상으로 계산
+        */
+
+        if (hour < 13) {
+            return;
+        }
+
+
+        const dateKey =
+            getDateKey(date);
+
+
+        if (
+            !afternoonRecordsByDate[dateKey]
+        ) {
+
+            afternoonRecordsByDate[dateKey] = [];
+        }
+
+
+        afternoonRecordsByDate[dateKey].push(
+            record
+        );
+    });
+
+
+    /*
+        수면 여부별 통계 계산
+    */
+
+    function calculateStats(dateKeys) {
+
+        const totalDays =
+            dateKeys.length;
+
+
+        let occurrenceDays = 0;
+        let totalSymptoms = 0;
+        let totalDuration = 0;
+
+
+        dateKeys.forEach(dateKey => {
+
+            const recordsForDay =
+                afternoonRecordsByDate[dateKey] || [];
+
+
+            if (recordsForDay.length > 0) {
+
+                occurrenceDays++;
+
+                totalSymptoms +=
+                    recordsForDay.length;
+
+                recordsForDay.forEach(record => {
+
+                    totalDuration +=
+                        Number(record.duration) || 0;
+                });
+            }
+        });
+
+
+        /*
+            오후 증상 발생률
+            = 오후 증상이 한 번이라도 발생한 날 /
+              수면 기록이 있는 날
+        */
+
+        const occurrenceRate =
+            totalDays > 0
+                ? Math.round(
+                    (occurrenceDays / totalDays) * 100
+                )
+                : 0;
+
+
+        /*
+            하루 평균 증상
+            = 오후 증상 횟수 / 기록일
+        */
+
+        const averageSymptoms =
+            totalDays > 0
+                ? totalSymptoms / totalDays
+                : 0;
+
+
+        /*
+            증상이 실제 발생한 경우의 평균 지속시간
+        */
+
+        const averageDuration =
+            totalSymptoms > 0
+                ? Math.round(
+                    totalDuration / totalSymptoms
+                )
+                : 0;
+
+
+        return {
+            totalDays,
+            occurrenceDays,
+            occurrenceRate,
+            totalSymptoms,
+            averageSymptoms,
+            averageDuration
+        };
+    }
+
+
+    const sleptStats =
+        calculateStats(
+            sleepDays.slept
+        );
+
+
+    const didNotSleepStats =
+        calculateStats(
+            sleepDays.didNotSleep
+        );
+
+
+    /*
+        수면 기록 자체가 하나도 없는 경우
+    */
+
+    if (
+        sleptStats.totalDays === 0 &&
+        didNotSleepStats.totalDays === 0
+    ) {
+
+        container.innerHTML = `
+            <div class="report-empty">
+                오후 수면 기록이 없습니다.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    /*
+        비교표
+    */
+
+    container.innerHTML = `
+
+        <div
+            style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                margin-bottom: 12px;
+            "
+        >
+
+            <div
+                style="
+                    border: 1px solid #e5e5e5;
+                    border-radius: 14px;
+                    padding: 16px;
+                    background: #fff;
+                "
+            >
+
+                <div
+                    style="
+                        font-size: 13px;
+                        color: #777;
+                        margin-bottom: 12px;
+                    "
+                >
+                    수면함
+                </div>
+
+                <div
+                    style="
+                        font-size: 24px;
+                        font-weight: 700;
+                        margin-bottom: 4px;
+                    "
+                >
+                    ${sleptStats.occurrenceRate}%
+                </div>
+
+                <div
+                    style="
+                        font-size: 12px;
+                        color: #777;
+                    "
+                >
+                    오후 증상 발생률
+                </div>
+
+            </div>
+
+
+            <div
+                style="
+                    border: 1px solid #e5e5e5;
+                    border-radius: 14px;
+                    padding: 16px;
+                    background: #fff;
+                "
+            >
+
+                <div
+                    style="
+                        font-size: 13px;
+                        color: #777;
+                        margin-bottom: 12px;
+                    "
+                >
+                    수면하지 않음
+                </div>
+
+                <div
+                    style="
+                        font-size: 24px;
+                        font-weight: 700;
+                        margin-bottom: 4px;
+                    "
+                >
+                    ${didNotSleepStats.occurrenceRate}%
+                </div>
+
+                <div
+                    style="
+                        font-size: 12px;
+                        color: #777;
+                    "
+                >
+                    오후 증상 발생률
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            style="
+                border: 1px solid #e5e5e5;
+                border-radius: 14px;
+                overflow: hidden;
+                background: #fff;
+            "
+        >
+
+            <!-- 표 제목 -->
+
+            <div
+                style="
+                    display: grid;
+                    grid-template-columns: 1.3fr 1fr 1fr;
+                    padding: 13px 14px;
+                    background: #f7f7f7;
+                    font-size: 12px;
+                    color: #777;
+                "
+            >
+
+                <span></span>
+
+                <strong
+                    style="
+                        text-align: center;
+                        color: #444;
+                    "
+                >
+                    수면함
+                </strong>
+
+                <strong
+                    style="
+                        text-align: center;
+                        color: #444;
+                    "
+                >
+                    수면하지 않음
+                </strong>
+
+            </div>
+
+
+            <!-- 기록일 -->
+
+            <div
+                style="
+                    display: grid;
+                    grid-template-columns: 1.3fr 1fr 1fr;
+                    padding: 13px 14px;
+                    border-top: 1px solid #eee;
+                    font-size: 13px;
+                "
+            >
+
+                <span>
+                    기록일
+                </span>
+
+                <strong style="text-align: center;">
+                    ${sleptStats.totalDays}일
+                </strong>
+
+                <strong style="text-align: center;">
+                    ${didNotSleepStats.totalDays}일
+                </strong>
+
+            </div>
+
+
+            <!-- 오후 증상 횟수 -->
+
+            <div
+                style="
+                    display: grid;
+                    grid-template-columns: 1.3fr 1fr 1fr;
+                    padding: 13px 14px;
+                    border-top: 1px solid #eee;
+                    font-size: 13px;
+                "
+            >
+
+                <span>
+                    오후 증상 횟수
+                </span>
+
+                <strong style="text-align: center;">
+                    ${sleptStats.totalSymptoms}회
+                </strong>
+
+                <strong style="text-align: center;">
+                    ${didNotSleepStats.totalSymptoms}회
+                </strong>
+
+            </div>
+
+
+            <!-- 하루 평균 증상 -->
+
+            <div
+                style="
+                    display: grid;
+                    grid-template-columns: 1.3fr 1fr 1fr;
+                    padding: 13px 14px;
+                    border-top: 1px solid #eee;
+                    font-size: 13px;
+                "
+            >
+
+                <span>
+                    하루 평균 증상
+                </span>
+
+                <strong style="text-align: center;">
+                    ${sleptStats.averageSymptoms.toFixed(1)}회
+                </strong>
+
+                <strong style="text-align: center;">
+                    ${didNotSleepStats.averageSymptoms.toFixed(1)}회
+                </strong>
+
+            </div>
+
+
+            <!-- 평균 지속시간 -->
+
+            <div
+                style="
+                    display: grid;
+                    grid-template-columns: 1.3fr 1fr 1fr;
+                    padding: 13px 14px;
+                    border-top: 1px solid #eee;
+                    font-size: 13px;
+                "
+            >
+
+                <span>
+                    평균 지속시간
+                </span>
+
+                <strong style="text-align: center;">
+                    ${formatDuration(
+                        sleptStats.averageDuration
+                    )}
+                </strong>
+
+                <strong style="text-align: center;">
+                    ${formatDuration(
+                        didNotSleepStats.averageDuration
+                    )}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <p
+            style="
+                margin: 12px 2px 0;
+                color: #888;
+                font-size: 12px;
+                line-height: 1.5;
+            "
+        >
+            ※ 수면 기록이 있는 날짜만 비교하며,
+            13시 이후 발생한 증상을 기준으로 계산합니다.
+        </p>
+    `;
 }
 
 
@@ -658,38 +1165,106 @@ async function loadReport() {
 
     try {
 
-        const q = query(
-            collection(db, "seizures"),
-            where(
-                "startedAt",
-                ">=",
-                monthStart
-            ),
-            where(
-                "startedAt",
-                "<",
-                nextMonthStart
-            ),
-            orderBy("startedAt", "asc")
-        );
+        /* ========================================
+           증상 기록
+        ======================================== */
+
+        const seizureQuery =
+            query(
+                collection(db, "seizures"),
+                where(
+                    "startedAt",
+                    ">=",
+                    monthStart
+                ),
+                where(
+                    "startedAt",
+                    "<",
+                    nextMonthStart
+                ),
+                orderBy(
+                    "startedAt",
+                    "asc"
+                )
+            );
 
 
-        const snapshot =
-            await getDocs(q);
+        const seizureSnapshot =
+            await getDocs(seizureQuery);
 
 
         const records =
-            snapshot.docs.map(doc => ({
+            seizureSnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
             }));
 
 
+        /* ========================================
+           오후 수면 기록
+        ======================================== */
+
+        const dailyRecordsSnapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "dailyRecords"
+                )
+            );
+
+
+        const monthStartKey =
+            `${year}-${String(
+                month + 1
+            ).padStart(2, "0")}-01`;
+
+
+        const nextMonthStartKey =
+            `${nextMonthStart.getFullYear()}-${String(
+                nextMonthStart.getMonth() + 1
+            ).padStart(2, "0")}-01`;
+
+
+        const dailyRecords =
+            dailyRecordsSnapshot.docs
+                .map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }))
+                .filter(record => {
+
+                    return (
+                        record.date >= monthStartKey &&
+                        record.date < nextMonthStartKey
+                    );
+
+                });
+
+
+        /* ========================================
+           기존 리포트
+        ======================================== */
+
         updateSummary(records);
+
         updateTimeBars(records);
+
         updateTypeBars(records);
+
         updateDailyRecords(records);
+
         updateDetailRecords(records);
+
+
+        /* ========================================
+           오후 수면 비교
+        ======================================== */
+
+        updateSleepComparison(
+            records,
+            dailyRecords
+        );
+
 
     } catch (error) {
 
@@ -699,6 +1274,7 @@ async function loadReport() {
         );
 
     }
+
 }
 
 

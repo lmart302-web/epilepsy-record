@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -10,6 +11,73 @@
     <title>증상 기록</title>
 
     <link rel="stylesheet" href="./css/style.css">
+
+    <style>
+        /* 오후 수면 기록 */
+        .sleep-record-section {
+            margin-top: 16px;
+        }
+
+        .sleep-record-card {
+            padding: 20px;
+        }
+
+        .sleep-record-title {
+            margin-bottom: 6px;
+        }
+
+        .sleep-record-description {
+            margin: 0 0 16px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* 수면 선택 토글 */
+        .sleep-choice-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f5f5f5;
+        }
+
+        .sleep-choice-button {
+            border: 0;
+            border-radius: 0;
+            background: #f5f5f5;
+            color: #777;
+            padding: 14px 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition:
+                background-color 0.15s ease,
+                color 0.15s ease;
+        }
+
+        .sleep-choice-button + .sleep-choice-button {
+            border-left: 1px solid #ddd;
+        }
+
+        .sleep-choice-button.selected {
+            background: #222;
+            color: #fff;
+        }
+
+        .sleep-choice-button.selected::before {
+            content: "✓ ";
+            font-weight: 700;
+        }
+
+        .sleep-status {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #777;
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -124,6 +192,52 @@
 
         </section>
 
+
+        <!-- 오후 수면 기록 -->
+        <section class="today-card sleep-record-section">
+
+            <div class="sleep-record-card">
+
+                <h2 class="sleep-record-title">
+                    오후 수면 기록
+                </h2>
+
+                <p class="sleep-record-description">
+                    오늘 점심 식사 후 수면했나요?
+                </p>
+
+                <div class="sleep-choice-grid">
+
+                    <button
+                        type="button"
+                        class="sleep-choice-button"
+                        id="sleepYesButton"
+                    >
+                        수면함
+                    </button>
+
+                    <button
+                        type="button"
+                        class="sleep-choice-button"
+                        id="sleepNoButton"
+                    >
+                        수면하지 않음
+                    </button>
+
+                </div>
+
+                <div
+                    class="sleep-status"
+                    id="sleepStatus"
+                >
+                    아직 기록하지 않았습니다.
+                </div>
+
+            </div>
+
+        </section>
+
+
         <!-- 안내 -->
         <section class="notice">
 
@@ -186,8 +300,6 @@
 
         </section>
 
-
-        
 
     </main>
 
@@ -462,7 +574,6 @@
     </div>
 
 </div>
-
 
 
 <script type="module" src="./js/index.js"></script>
