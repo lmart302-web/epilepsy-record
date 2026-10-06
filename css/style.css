@@ -1486,3 +1486,8 @@ button {
 .recent-section {
     margin-top: 30px;
 }
+
+/* 지승 증상 수동입력 → 오늘 수면 기록 간격 */
+.sleep-record-section {
+    margin-top: -17px;
+}
