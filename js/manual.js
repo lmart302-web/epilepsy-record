@@ -7,10 +7,10 @@ import {
 import { db } from "./firebase.js";
 
 
-let selectedType = "";
+let selectedTypes = [];
 let selectedObservations = [];
-let selectedOccurrence = "";
-let selectedAfter = "";
+let selectedOccurrences = [];
+let selectedAfters = [];
 
 
 const dateInput = document.getElementById("occurDate");
@@ -167,7 +167,7 @@ endInput.addEventListener(
 
 /* ========================================
    증상 유형
-   하나만 선택
+   여러 개 선택 가능
 ======================================== */
 
 document
@@ -176,20 +176,36 @@ document
 
         button.addEventListener("click", () => {
 
-            document
-                .querySelectorAll(
-                    "#typeChoices .choice-button"
-                )
-                .forEach(item => {
-                    item.classList.remove("selected");
-                });
-
-
-            button.classList.add("selected");
-
-
-            selectedType =
+            const value =
                 button.dataset.value;
+
+
+            const index =
+                selectedTypes.indexOf(value);
+
+
+            if (index >= 0) {
+
+                // 이미 선택된 항목 → 해제
+                selectedTypes.splice(
+                    index,
+                    1
+                );
+
+                button.classList.remove(
+                    "selected"
+                );
+
+            } else {
+
+                // 선택되지 않은 항목 → 추가
+                selectedTypes.push(value);
+
+                button.classList.add(
+                    "selected"
+                );
+            }
+
         });
 
     });
@@ -232,7 +248,6 @@ document
                 button.classList.add(
                     "selected"
                 );
-
             }
 
         });
@@ -242,7 +257,7 @@ document
 
 /* ========================================
    발생 시점
-   하나만 선택
+   여러 개 선택 가능
 ======================================== */
 
 document
@@ -251,20 +266,34 @@ document
 
         button.addEventListener("click", () => {
 
-            document
-                .querySelectorAll(
-                    "#occurrenceChoices .choice-button"
-                )
-                .forEach(item => {
-                    item.classList.remove("selected");
-                });
-
-
-            button.classList.add("selected");
-
-
-            selectedOccurrence =
+            const value =
                 button.dataset.value;
+
+
+            const index =
+                selectedOccurrences.indexOf(value);
+
+
+            if (index >= 0) {
+
+                selectedOccurrences.splice(
+                    index,
+                    1
+                );
+
+                button.classList.remove(
+                    "selected"
+                );
+
+            } else {
+
+                selectedOccurrences.push(value);
+
+                button.classList.add(
+                    "selected"
+                );
+            }
+
         });
 
     });
@@ -272,7 +301,7 @@ document
 
 /* ========================================
    증상 후 상태
-   하나만 선택
+   여러 개 선택 가능
 ======================================== */
 
 document
@@ -281,20 +310,34 @@ document
 
         button.addEventListener("click", () => {
 
-            document
-                .querySelectorAll(
-                    "#afterChoices .choice-button"
-                )
-                .forEach(item => {
-                    item.classList.remove("selected");
-                });
-
-
-            button.classList.add("selected");
-
-
-            selectedAfter =
+            const value =
                 button.dataset.value;
+
+
+            const index =
+                selectedAfters.indexOf(value);
+
+
+            if (index >= 0) {
+
+                selectedAfters.splice(
+                    index,
+                    1
+                );
+
+                button.classList.remove(
+                    "selected"
+                );
+
+            } else {
+
+                selectedAfters.push(value);
+
+                button.classList.add(
+                    "selected"
+                );
+            }
+
         });
 
     });
@@ -330,7 +373,7 @@ saveButton.addEventListener(
         }
 
 
-        if (!selectedType) {
+        if (selectedTypes.length === 0) {
 
             alert(
                 "증상 유형을 선택해주세요."
@@ -394,17 +437,19 @@ saveButton.addEventListener(
 
             duration,
 
+
+            // 복수 선택
             type:
-                selectedType,
+                selectedTypes,
 
             observations:
                 selectedObservations,
 
             occurrence:
-                selectedOccurrence,
+                selectedOccurrences,
 
             after:
-                selectedAfter,
+                selectedAfters,
 
             memo,
 
@@ -417,6 +462,7 @@ saveButton.addEventListener(
 
 
         saveButton.disabled = true;
+
         saveButton.textContent =
             "저장 중...";
 
@@ -434,7 +480,9 @@ saveButton.addEventListener(
             );
 
 
-            location.href = "index.html";
+            location.href =
+                "index.html";
+
 
         } catch (error) {
 
@@ -457,4 +505,3 @@ saveButton.addEventListener(
 
     }
 );
-
