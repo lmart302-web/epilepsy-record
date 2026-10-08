@@ -39,6 +39,7 @@ function formatDuration(seconds) {
 }
 
 
+
 /* ========================================
    날짜 변환
 ======================================== */
@@ -58,6 +59,7 @@ function getRecordDate(value) {
     }
 
     if (typeof value === "string") {
+
         const date = new Date(value);
 
         return Number.isNaN(date.getTime())
@@ -66,6 +68,7 @@ function getRecordDate(value) {
     }
 
     if (typeof value === "number") {
+
         const date = new Date(value);
 
         return Number.isNaN(date.getTime())
@@ -75,6 +78,7 @@ function getRecordDate(value) {
 
     return null;
 }
+
 
 
 /* ========================================
@@ -96,6 +100,7 @@ function getDateKey(date) {
 }
 
 
+
 /* ========================================
    월 제목
 ======================================== */
@@ -105,6 +110,7 @@ function updateMonthTitle() {
     document.getElementById("currentMonth").textContent =
         `${currentDate.getFullYear()}년 ${currentDate.getMonth() + 1}월`;
 }
+
 
 
 /* ========================================
@@ -148,6 +154,7 @@ function updateSummary(records) {
     document.getElementById("longestDuration").textContent =
         formatDuration(longestDuration);
 }
+
 
 
 /* ========================================
@@ -230,6 +237,7 @@ function updateTimeBars(records) {
 
         row.className = "time-bar-row";
 
+
         row.innerHTML = `
 
             <div class="time-bar-label">
@@ -244,6 +252,7 @@ function updateTimeBars(records) {
 
             </div>
 
+
             <div class="time-bar-background">
 
                 <div
@@ -252,18 +261,138 @@ function updateTimeBars(records) {
                 ></div>
 
             </div>
+
         `;
 
 
         container.appendChild(row);
+
     });
 }
+
+
+
+/* ========================================
+   발생시점
+======================================== */
+
+function updateOccurrenceBars(records) {
+
+    const container =
+        document.getElementById("occurrenceBars");
+
+    container.innerHTML = "";
+
+
+    if (records.length === 0) {
+
+        container.innerHTML = `
+            <div class="report-empty">
+                기록이 없습니다.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const counts = {};
+
+
+    records.forEach(record => {
+
+        const occurrences =
+            Array.isArray(record.occurrence)
+                ? record.occurrence
+                : [];
+
+        occurrences.forEach(occurrence => {
+
+            counts[occurrence] =
+                (counts[occurrence] || 0) + 1;
+
+        });
+
+    });
+
+
+    const sortedOccurrences =
+        Object.entries(counts)
+            .sort((a, b) => b[1] - a[1]);
+
+
+    if (sortedOccurrences.length === 0) {
+
+        container.innerHTML = `
+            <div class="report-empty">
+                기록이 없습니다.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const maxCount =
+        sortedOccurrences[0][1];
+
+
+    sortedOccurrences.forEach(
+        ([occurrence, count]) => {
+
+            const width =
+                maxCount > 0
+                    ? `${Math.max(
+                        (count / maxCount) * 100,
+                        8
+                    )}%`
+                    : "0%";
+
+
+            const row =
+                document.createElement("div");
+
+            row.className = "type-bar-row";
+
+
+            row.innerHTML = `
+
+                <div class="type-bar-label">
+
+                    <span>
+                        ${occurrence}
+                    </span>
+
+                    <strong>
+                        ${count}회
+                    </strong>
+
+                </div>
+
+
+                <div class="type-bar-background">
+
+                    <div
+                        class="type-bar-fill"
+                        style="width: ${width}"
+                    ></div>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(row);
+
+        }
+    );
+}
+
 
 
 /* ========================================
    오후 수면과 증상 비교
 ======================================== */
-
 
 function updateSleepComparison(
     records,
@@ -393,6 +522,7 @@ function updateSleepComparison(
 
                     totalDuration +=
                         Number(record.duration) || 0;
+
                 });
             }
         });
@@ -750,99 +880,6 @@ function updateSleepComparison(
 }
 
 
-/* ========================================
-   증상 유형
-======================================== */
-
-function updateTypeBars(records) {
-
-    const container =
-        document.getElementById("typeBars");
-
-    container.innerHTML = "";
-
-
-    if (records.length === 0) {
-
-        container.innerHTML = `
-            <div class="report-empty">
-                기록이 없습니다.
-            </div>
-        `;
-
-        return;
-    }
-
-
-    const counts = {};
-
-
-    records.forEach(record => {
-
-        const type =
-            record.type || "기록 없음";
-
-        counts[type] =
-            (counts[type] || 0) + 1;
-    });
-
-
-    const sortedTypes =
-        Object.entries(counts)
-            .sort((a, b) => b[1] - a[1]);
-
-
-    const maxCount =
-        sortedTypes.length > 0
-            ? sortedTypes[0][1]
-            : 0;
-
-
-    sortedTypes.forEach(([type, count]) => {
-
-        const width =
-            maxCount > 0
-                ? `${Math.max(
-                    (count / maxCount) * 100,
-                    8
-                )}%`
-                : "0%";
-
-
-        const row =
-            document.createElement("div");
-
-        row.className = "type-bar-row";
-
-        row.innerHTML = `
-
-            <div class="type-bar-label">
-
-                <span>
-                    ${type}
-                </span>
-
-                <strong>
-                    ${count}회
-                </strong>
-
-            </div>
-
-            <div class="type-bar-background">
-
-                <div
-                    class="type-bar-fill"
-                    style="width: ${width}"
-                ></div>
-
-            </div>
-        `;
-
-
-        container.appendChild(row);
-    });
-}
-
 
 /* ========================================
    일별 발생
@@ -963,6 +1000,7 @@ function updateDailyRecords(records) {
 }
 
 
+
 /* ========================================
    상세 기록
 ======================================== */
@@ -1065,7 +1103,28 @@ function updateDetailRecords(records) {
                     </span>
 
                     <strong>
-                        ${record.type || "-"}
+                        ${
+                            Array.isArray(record.type)
+                                ? record.type.join(", ")
+                                : record.type || "-"
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        발생시점
+                    </span>
+
+                    <strong>
+                        ${
+                            Array.isArray(record.occurrence)
+                                ? record.occurrence.join(", ")
+                                : record.occurrence || "-"
+                        }
                     </strong>
 
                 </div>
@@ -1078,7 +1137,11 @@ function updateDetailRecords(records) {
                     </span>
 
                     <strong>
-                        ${record.after || "-"}
+                        ${
+                            Array.isArray(record.after)
+                                ? record.after.join(", ")
+                                : record.after || "-"
+                        }
                     </strong>
 
                 </div>
@@ -1116,6 +1179,7 @@ function updateDetailRecords(records) {
 }
 
 
+
 /* ========================================
    상세 기록 펼치기
 ======================================== */
@@ -1129,6 +1193,7 @@ document
             .classList.toggle("open");
 
     });
+
 
 
 /* ========================================
@@ -1242,14 +1307,14 @@ async function loadReport() {
 
 
         /* ========================================
-           기존 리포트
+           리포트
         ======================================== */
 
         updateSummary(records);
 
         updateTimeBars(records);
 
-        updateTypeBars(records);
+        updateOccurrenceBars(records);
 
         updateDailyRecords(records);
 
@@ -1278,6 +1343,7 @@ async function loadReport() {
 }
 
 
+
 /* ========================================
    월 이동
 ======================================== */
@@ -1297,6 +1363,7 @@ document
     });
 
 
+
 document
     .getElementById("nextMonth")
     .addEventListener("click", () => {
@@ -1310,6 +1377,7 @@ document
 
         loadReport();
     });
+
 
 
 /* ========================================

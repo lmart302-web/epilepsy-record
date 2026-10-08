@@ -1,234 +1,257 @@
 <!DOCTYPE html>
-
 <html lang="ko">
+
 <head>
+
     <meta charset="UTF-8">
 
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    <title>증상 리포트</title>
 
-<title>증상 리포트</title>
-
-<link rel="stylesheet" href="./css/style.css">
-
+    <link rel="stylesheet" href="./css/style.css">
 
 </head>
+
 
 <body>
 
 <div class="app">
 
 
-<header class="page-header">
-
-    <button
-        type="button"
-        class="back-button"
-        onclick="location.href='index.html'"
-    >
-        ←
-    </button>
-
-    <div>
-
-        <span class="page-header-label">
-            기록 분석
-        </span>
-
-        <h1>
-            증상 리포트
-        </h1>
-
-    </div>
-
-</header>
-
-
-<main class="report-page">
-
-    <!-- 월 선택 -->
-    <section class="period-selector">
+    <header class="page-header">
 
         <button
             type="button"
-            id="prevMonth"
+            class="back-button"
+            onclick="location.href='index.html'"
         >
-            ‹
+            ←
         </button>
 
-        <strong id="currentMonth">
-            2026년 9월
-        </strong>
 
-        <button
-            type="button"
-            id="nextMonth"
-        >
-            ›
-        </button>
+        <div>
 
-    </section>
-
-
-    <!-- 월간 요약 -->
-    <section class="report-section">
-
-        <h2>
-            월간 요약
-        </h2>
-
-
-        <div class="report-stats">
-
-            <div class="report-stat">
-
-                <span>
-                    총 증상
-                </span>
-
-                <strong id="totalCount">
-                    0회
-                </strong>
-
-            </div>
-
-
-            <div class="report-stat">
-
-                <span>
-                    평균 지속시간
-                </span>
-
-                <strong id="averageDuration">
-                    0초
-                </strong>
-
-            </div>
-
-
-            <div class="report-stat">
-
-                <span>
-                    가장 긴 증상
-                </span>
-
-                <strong id="longestDuration">
-                    0초
-                </strong>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- 일별 발생 -->
-    <section class="report-section">
-
-        <h2>
-            일별 발생
-        </h2>
-
-        <div
-            id="dailyRecords"
-            class="daily-chart"
-        ></div>
-
-    </section>
-
-
-    <!-- 발생 시간 -->
-    <section class="report-section">
-
-        <h2>
-            발생 시간
-        </h2>
-
-        <div id="timeBars"></div>
-
-    </section>
-
-
-    <!-- 오후 수면과 증상 -->
-    <section class="report-section">
-
-        <h2>
-            오후 수면과 증상
-        </h2>
-
-        <p
-            style="
-                margin: -8px 0 16px;
-                color: #777;
-                font-size: 13px;
-                line-height: 1.5;
-            "
-        >
-            수면 기록이 있는 날짜를 기준으로 13시 이후 발생한 증상을 비교합니다.
-        </p>
-
-        <div id="sleepComparison"></div>
-
-    </section>
-
-
-    <!-- 증상 유형 -->
-    <section class="report-section">
-
-        <h2>
-            증상 유형
-        </h2>
-
-        <div id="typeBars"></div>
-
-    </section>
-
-
-
-    <!-- 상세 기록 -->
-    <section
-        class="report-section detail-section"
-        id="detailSection"
-    >
-
-        <button
-            type="button"
-            class="detail-section-toggle"
-            id="detailSectionToggle"
-        >
-
-            <h2>
-                이번 달 기록
-            </h2>
-
-            <span id="detailSectionArrow">
-                ↓
+            <span class="page-header-label">
+                기록 분석
             </span>
 
-        </button>
-
-
-        <div class="detail-records-hidden">
-
-            <div id="detailRecords"></div>
+            <h1>
+                증상 리포트
+            </h1>
 
         </div>
 
-    </section>
+    </header>
 
-</main>
+
+
+    <main class="report-page">
+
+
+        <!-- 월 선택 -->
+
+        <section class="period-selector">
+
+            <button
+                type="button"
+                id="prevMonth"
+            >
+                ‹
+            </button>
+
+
+            <strong id="currentMonth">
+                2026년 9월
+            </strong>
+
+
+            <button
+                type="button"
+                id="nextMonth"
+            >
+                ›
+            </button>
+
+        </section>
+
+
+
+        <!-- 월간 요약 -->
+
+        <section class="report-section">
+
+            <h2>
+                월간 요약
+            </h2>
+
+
+            <div class="report-stats">
+
+                <div class="report-stat">
+
+                    <span>
+                        총 증상
+                    </span>
+
+                    <strong id="totalCount">
+                        0회
+                    </strong>
+
+                </div>
+
+
+                <div class="report-stat">
+
+                    <span>
+                        평균 지속시간
+                    </span>
+
+                    <strong id="averageDuration">
+                        0초
+                    </strong>
+
+                </div>
+
+
+                <div class="report-stat">
+
+                    <span>
+                        가장 긴 증상
+                    </span>
+
+                    <strong id="longestDuration">
+                        0초
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- 일별 발생 -->
+
+        <section class="report-section">
+
+            <h2>
+                일별 발생
+            </h2>
+
+            <div
+                id="dailyRecords"
+                class="daily-chart"
+            ></div>
+
+        </section>
+
+
+
+        <!-- 발생 시간 -->
+
+        <section class="report-section">
+
+            <h2>
+                발생 시간
+            </h2>
+
+            <div id="timeBars"></div>
+
+        </section>
+
+
+
+        <!-- 발생시점 -->
+
+        <section class="report-section">
+
+            <h2>
+                발생시점
+            </h2>
+
+            <div id="occurrenceBars"></div>
+
+        </section>
+
+
+
+        <!-- 오후 수면과 증상 -->
+
+        <section class="report-section">
+
+            <h2>
+                오후 수면과 증상
+            </h2>
+
+
+            <p
+                style="
+                    margin: -8px 0 16px;
+                    color: #777;
+                    font-size: 13px;
+                    line-height: 1.5;
+                "
+            >
+                수면 기록이 있는 날짜를 기준으로 13시 이후 발생한 증상을 비교합니다.
+            </p>
+
+
+            <div id="sleepComparison"></div>
+
+        </section>
+
+
+
+        <!-- 상세 기록 -->
+
+        <section
+            class="report-section detail-section"
+            id="detailSection"
+        >
+
+            <button
+                type="button"
+                class="detail-section-toggle"
+                id="detailSectionToggle"
+            >
+
+                <h2>
+                    이번 달 기록
+                </h2>
+
+                <span id="detailSectionArrow">
+                    ↓
+                </span>
+
+            </button>
+
+
+            <div class="detail-records-hidden">
+
+                <div id="detailRecords"></div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
 
 </div>
+
 
 <script
     type="module"
     src="./js/report.js"
 ></script>
 
+
 </body>
+
 </html>
