@@ -83,7 +83,7 @@ button {
 
 .today-card {
     margin-bottom: 14px;
-    padding: 20px;
+    padding: 10px 20px;
     border: 1px solid #e6e7ea;
     border-radius: 18px;
     background: #ffffff;
@@ -1490,4 +1490,8 @@ button {
 /* 지승 증상 수동입력 → 오늘 수면 기록 간격 */
 .sleep-record-section {
     margin-top: -18px !important;
+}
+
+.sleep-record-card {
+    padding: 0px 20px;
 }
