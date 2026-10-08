@@ -4,7 +4,6 @@ import {
     query,
     where,
     orderBy,
-    limit,
     deleteDoc,
     updateDoc,
     doc,
@@ -331,7 +330,7 @@ document
 
 
 /* ========================================
-   마지막 증상
+   오늘의 증상
 ======================================== */
 
 async function loadLastRecord() {
@@ -339,12 +338,27 @@ async function loadLastRecord() {
     const container =
         document.getElementById("lastRecord");
 
+    const today = new Date();
+
+    const todayStart = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+    );
+
+    const tomorrowStart = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate() + 1
+    );
+
     try {
 
         const q = query(
             collection(db, "seizures"),
-            orderBy("startedAt", "desc"),
-            limit(1)
+            where("startedAt", ">=", todayStart),
+            where("startedAt", "<", tomorrowStart),
+            orderBy("startedAt", "desc")
         );
 
         const snapshot = await getDocs(q);
@@ -355,78 +369,80 @@ async function loadLastRecord() {
 
             container.innerHTML = `
                 <div class="empty-state">
-                    아직 기록된 증상이 없습니다.
+                    오늘 기록된 증상이 없습니다.
                 </div>
             `;
 
             return;
         }
 
-        const item = snapshot.docs[0];
-        const data = item.data();
 
-        const start = data.startedAt.toDate();
+        snapshot.forEach((item) => {
 
-        const record =
-            document.createElement("button");
+            const data = item.data();
 
-        record.type = "button";
-        record.className = "recent-record";
+            const start =
+                data.startedAt.toDate();
 
-        record.innerHTML = `
-            <div class="recent-record-time">
+            const record =
+                document.createElement("button");
 
-                <strong>
-                    ${formatTime(start)}
-                </strong>
+            record.type = "button";
+            record.className = "recent-record";
 
-                <span>
-                    ${start.getFullYear()}년
-                    ${start.getMonth() + 1}월
-                    ${start.getDate()}일
-                </span>
+            record.innerHTML = `
+                <div class="recent-record-time">
 
-            </div>
+                    <strong>
+                        ${formatTime(start)}
+                    </strong>
 
-            <div class="recent-record-info">
+                    <span>
+                        오늘
+                    </span>
 
-                <strong>
-                    ${data.type || "기록 없음"}
-                </strong>
+                </div>
 
-                <span>
-                    ${data.after || "증상 후 상태 미기록"}
-                </span>
+                <div class="recent-record-info">
 
-            </div>
+                    <strong>
+                        ${data.type || "기록 없음"}
+                    </strong>
 
-            <div class="recent-record-duration">
+                    <span>
+                        ${data.after || "증상 후 상태 미기록"}
+                    </span>
 
-                <strong>
-                    ${formatDuration(data.duration || 0)}
-                </strong>
+                </div>
 
-                <span>
-                    ›
-                </span>
+                <div class="recent-record-duration">
 
-            </div>
-        `;
+                    <strong>
+                        ${formatDuration(data.duration || 0)}
+                    </strong>
 
-        record.addEventListener("click", () => {
+                    <span>
+                        ›
+                    </span>
 
-            openRecordModal(
-                item.id,
-                data
-            );
+                </div>
+            `;
+
+            record.addEventListener("click", () => {
+
+                openRecordModal(
+                    item.id,
+                    data
+                );
+            });
+
+            container.appendChild(record);
         });
-
-        container.appendChild(record);
 
     } catch (error) {
 
         console.error(
-            "마지막 증상 불러오기 실패:",
+            "오늘의 증상 불러오기 실패:",
             error
         );
 
