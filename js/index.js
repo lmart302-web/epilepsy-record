@@ -1,3 +1,4 @@
+
 import {
     collection,
     getDocs,
@@ -18,14 +19,37 @@ import { db } from "./firebase.js";
 let selectedRecordId = null;
 let selectedRecordData = null;
 
-let editType = "";
+let editTypes = [];
 let editObservations = [];
-let editAfter = "";
+let editOccurrences = [];
+let editAfters = [];
 
 
 /* ========================================
    공통
 ======================================== */
+
+// 기존 데이터가 배열이든 문자열이든 배열로 변환
+function toArray(value) {
+
+    if (Array.isArray(value)) {
+        return value.filter(item => typeof item === "string");
+    }
+
+    if (typeof value === "string" && value.trim()) {
+        return [value];
+    }
+
+    return [];
+}
+
+
+// 배열 데이터를 화면에 표시할 문자열로 변환
+function displayValue(value) {
+
+    return toArray(value).join(", ") || "-";
+}
+
 
 function formatDuration(seconds) {
 
@@ -49,11 +73,13 @@ function formatDuration(seconds) {
 
 
 function formatDate(date) {
+
     return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
 }
 
 
 function formatTime(date) {
+
     return date.toLocaleTimeString("ko-KR", {
         hour: "2-digit",
         minute: "2-digit"
@@ -76,7 +102,6 @@ function updateTodayDate() {
 
 /* ========================================
    날짜 키
-   예: 2026-10-06
 ======================================== */
 
 function getTodayKey() {
@@ -92,7 +117,7 @@ function getTodayKey() {
 
 
 /* ========================================
-   오늘 기록
+   오늘 기록 현황
 ======================================== */
 
 async function loadTodayRecords() {
@@ -128,7 +153,6 @@ async function loadTodayRecords() {
         snapshot.forEach((item) => {
 
             const data = item.data();
-
             const duration = data.duration || 0;
 
             totalDuration += duration;
@@ -155,7 +179,7 @@ async function loadTodayRecords() {
 
 
 /* ========================================
-   오후 수면 기록
+   오후 수면 기록 불러오기
 ======================================== */
 
 async function loadTodaySleepRecord() {
@@ -169,11 +193,7 @@ async function loadTodaySleepRecord() {
     const sleepStatus =
         document.getElementById("sleepStatus");
 
-    if (
-        !sleepYesButton ||
-        !sleepNoButton ||
-        !sleepStatus
-    ) {
+    if (!sleepYesButton || !sleepNoButton || !sleepStatus) {
         return;
     }
 
@@ -205,16 +225,12 @@ async function loadTodaySleepRecord() {
         if (data.postLunchSleep === true) {
 
             sleepYesButton.classList.add("selected");
-
-            sleepStatus.textContent =
-                "오늘 오후 수면함";
+            sleepStatus.textContent = "오늘 오후 수면함";
 
         } else if (data.postLunchSleep === false) {
 
             sleepNoButton.classList.add("selected");
-
-            sleepStatus.textContent =
-                "오늘 오후 수면하지 않음";
+            sleepStatus.textContent = "오늘 오후 수면하지 않음";
 
         } else {
 
@@ -224,10 +240,7 @@ async function loadTodaySleepRecord() {
 
     } catch (error) {
 
-        console.error(
-            "오후 수면 기록 불러오기 실패:",
-            error
-        );
+        console.error("오후 수면 기록 불러오기 실패:", error);
 
         sleepStatus.textContent =
             "기록을 불러오지 못했습니다.";
@@ -270,9 +283,7 @@ async function saveSleepRecord(slept) {
                 postLunchSleep: slept,
                 updatedAt: serverTimestamp()
             },
-            {
-                merge: true
-            }
+            { merge: true }
         );
 
         sleepYesButton.classList.toggle(
@@ -285,21 +296,15 @@ async function saveSleepRecord(slept) {
             slept === false
         );
 
-        sleepStatus.textContent =
-            slept
-                ? "오늘 오후 수면함"
-                : "오늘 오후 수면하지 않음";
+        sleepStatus.textContent = slept
+            ? "오늘 오후 수면함"
+            : "오늘 오후 수면하지 않음";
 
     } catch (error) {
 
-        console.error(
-            "오후 수면 기록 저장 실패:",
-            error
-        );
+        console.error("오후 수면 기록 저장 실패:", error);
 
-        alert(
-            "오후 수면 기록 저장에 실패했습니다."
-        );
+        alert("오후 수면 기록 저장에 실패했습니다.");
 
     } finally {
 
@@ -316,7 +321,6 @@ async function saveSleepRecord(slept) {
 document
     .getElementById("sleepYesButton")
     .addEventListener("click", () => {
-
         saveSleepRecord(true);
     });
 
@@ -324,7 +328,6 @@ document
 document
     .getElementById("sleepNoButton")
     .addEventListener("click", () => {
-
         saveSleepRecord(false);
     });
 
@@ -376,64 +379,35 @@ async function loadLastRecord() {
             return;
         }
 
-
         snapshot.forEach((item) => {
 
             const data = item.data();
+            const start = data.startedAt.toDate();
 
-            const start =
-                data.startedAt.toDate();
-
-            const record =
-                document.createElement("button");
+            const record = document.createElement("button");
 
             record.type = "button";
             record.className = "recent-record";
 
             record.innerHTML = `
                 <div class="recent-record-time">
-
-                    <strong>
-                        ${formatTime(start)}
-                    </strong>
-
-                    <span>
-                        오늘
-                    </span>
-
+                    <strong>${formatTime(start)}</strong>
+                    <span>오늘</span>
                 </div>
 
                 <div class="recent-record-info">
-
-                    <strong>
-                        ${data.type || "기록 없음"}
-                    </strong>
-
-                    <span>
-                        ${data.after || "증상 후 상태 미기록"}
-                    </span>
-
+                    <strong>${displayValue(data.type) === "-" ? "기록 없음" : displayValue(data.type)}</strong>
+                    <span>${displayValue(data.after) === "-" ? "증상 후 상태 미기록" : displayValue(data.after)}</span>
                 </div>
 
                 <div class="recent-record-duration">
-
-                    <strong>
-                        ${formatDuration(data.duration || 0)}
-                    </strong>
-
-                    <span>
-                        ›
-                    </span>
-
+                    <strong>${formatDuration(data.duration || 0)}</strong>
+                    <span>›</span>
                 </div>
             `;
 
             record.addEventListener("click", () => {
-
-                openRecordModal(
-                    item.id,
-                    data
-                );
+                openRecordModal(item.id, data);
             });
 
             container.appendChild(record);
@@ -441,10 +415,7 @@ async function loadLastRecord() {
 
     } catch (error) {
 
-        console.error(
-            "오늘의 증상 불러오기 실패:",
-            error
-        );
+        console.error("오늘의 증상 불러오기 실패:", error);
 
         container.innerHTML = `
             <div class="empty-state">
@@ -464,18 +435,11 @@ function openRecordModal(id, data) {
     selectedRecordId = id;
     selectedRecordData = data;
 
-    const start =
-        data.startedAt.toDate();
+    const start = data.startedAt.toDate();
 
-    const end =
-        data.endedAt
-            ? data.endedAt.toDate()
-            : null;
-
-    const observations =
-        Array.isArray(data.observations)
-            ? data.observations.join(", ")
-            : "-";
+    const end = data.endedAt
+        ? data.endedAt.toDate()
+        : null;
 
     document.getElementById("modalTitle").textContent =
         "증상 기록";
@@ -490,96 +454,49 @@ function openRecordModal(id, data) {
         document.getElementById("modalBody");
 
     modalBody.innerHTML = `
-
         <div class="modal-info">
 
             <div class="modal-info-row">
                 <span>발생 시간</span>
-
-                <strong>
-                    ${formatDate(start)}
-                    ${formatTime(start)}
-                </strong>
+                <strong>${formatDate(start)} ${formatTime(start)}</strong>
             </div>
-
 
             <div class="modal-info-row">
-
-                <span>
-                    종료 시간
-                </span>
-
-                <strong>
-                    ${end ? formatTime(end) : "미입력"}
-                </strong>
-
+                <span>종료 시간</span>
+                <strong>${end ? formatTime(end) : "미입력"}</strong>
             </div>
-
 
             <div class="modal-info-row highlight">
-
-                <span>
-                    지속시간
-                </span>
-
-                <strong>
-                    ${formatDuration(data.duration || 0)}
-                </strong>
-
+                <span>지속시간</span>
+                <strong>${formatDuration(data.duration || 0)}</strong>
             </div>
 
-
             <div class="modal-info-row">
-
-                <span>
-                    증상 유형
-                </span>
-
-                <strong>
-                    ${data.type || "-"}
-                </strong>
-
+                <span>증상 유형</span>
+                <strong>${displayValue(data.type)}</strong>
             </div>
 
-
             <div class="modal-info-row">
-
-                <span>
-                    관찰 사항
-                </span>
-
-                <strong>
-                    ${observations}
-                </strong>
-
+                <span>관찰 사항</span>
+                <strong>${displayValue(data.observations)}</strong>
             </div>
 
+            <div class="modal-info-row">
+                <span>발생 시점</span>
+                <strong>${displayValue(data.occurrence)}</strong>
+            </div>
 
             <div class="modal-info-row">
-
-                <span>
-                    증상 후 상태
-                </span>
-
-                <strong>
-                    ${data.after || "-"}
-                </strong>
-
+                <span>증상 후 상태</span>
+                <strong>${displayValue(data.after)}</strong>
             </div>
 
             ${
                 data.memo
                     ? `
                         <div class="modal-info-row">
-
-                            <span>
-                                메모
-                            </span>
-
-                            <strong>
-                                ${data.memo}
-                            </strong>
-
+                            <span>메모</span>
+                            <strong>${data.memo}</strong>
                         </div>
                     `
                     : ""
@@ -595,7 +512,7 @@ function openRecordModal(id, data) {
 
 
 /* ========================================
-   수정
+   수정 모드 열기
 ======================================== */
 
 function openEditMode() {
@@ -604,16 +521,19 @@ function openEditMode() {
         return;
     }
 
-    editType =
-        selectedRecordData.type || "";
+    // 기존에 저장된 배열을 그대로 불러옴.
+    // 문자열로 저장된 이전 데이터도 호환.
+    editTypes =
+        toArray(selectedRecordData.type);
 
     editObservations =
-        Array.isArray(selectedRecordData.observations)
-            ? [...selectedRecordData.observations]
-            : [];
+        toArray(selectedRecordData.observations);
 
-    editAfter =
-        selectedRecordData.after || "";
+    editOccurrences =
+        toArray(selectedRecordData.occurrence);
+
+    editAfters =
+        toArray(selectedRecordData.after);
 
     document.getElementById("editMemo").value =
         selectedRecordData.memo || "";
@@ -631,157 +551,176 @@ function openEditMode() {
 }
 
 
+/* ========================================
+   수정 화면 선택 상태 갱신
+======================================== */
+
 function updateEditSelections() {
 
     document
-        .querySelectorAll(
-            "#editTypeChoices .edit-choice-button"
-        )
+        .querySelectorAll("#editTypeChoices .edit-choice-button")
         .forEach((button) => {
 
             button.classList.toggle(
                 "selected",
-                button.dataset.type === editType
+                editTypes.includes(button.dataset.type)
             );
         });
 
 
     document
-        .querySelectorAll(
-            "#editObservationChoices .edit-choice-button"
-        )
+        .querySelectorAll("#editObservationChoices .edit-choice-button")
         .forEach((button) => {
 
             button.classList.toggle(
                 "selected",
-                editObservations.includes(
-                    button.dataset.observation
-                )
+                editObservations.includes(button.dataset.observation)
             );
         });
 
 
     document
-        .querySelectorAll(
-            "#editAfterChoices .edit-choice-button"
-        )
+        .querySelectorAll("#editOccurrenceChoices .edit-choice-button")
         .forEach((button) => {
 
             button.classList.toggle(
                 "selected",
-                button.dataset.after === editAfter
+                editOccurrences.includes(button.dataset.occurrence)
+            );
+        });
+
+
+    document
+        .querySelectorAll("#editAfterChoices .edit-choice-button")
+        .forEach((button) => {
+
+            button.classList.toggle(
+                "selected",
+                editAfters.includes(button.dataset.after)
             );
         });
 }
 
 
 /* ========================================
-   수정 선택 이벤트 바인딩
+   증상 유형 선택
 ======================================== */
 
 document
-    .querySelectorAll(
-        "#editTypeChoices .edit-choice-button"
-    )
+    .querySelectorAll("#editTypeChoices .edit-choice-button")
     .forEach((button) => {
 
-        button.addEventListener(
-            "click",
-            () => {
+        button.addEventListener("click", () => {
 
-                editType =
-                    button.dataset.type;
+            const value = button.dataset.type;
 
-                updateEditSelections();
+            if (editTypes.includes(value)) {
+
+                editTypes = editTypes.filter(
+                    item => item !== value
+                );
+
+            } else {
+
+                editTypes.push(value);
             }
-        );
+
+            updateEditSelections();
+        });
     });
 
+
+/* ========================================
+   관찰 사항 선택
+======================================== */
 
 document
-    .querySelectorAll(
-        "#editObservationChoices .edit-choice-button"
-    )
+    .querySelectorAll("#editObservationChoices .edit-choice-button")
     .forEach((button) => {
 
-        button.addEventListener(
-            "click",
-            () => {
+        button.addEventListener("click", () => {
 
-                const value =
-                    button.dataset.observation;
+            const value = button.dataset.observation;
 
-                if (value === "특이사항 없음") {
+            if (editObservations.includes(value)) {
 
-                    editObservations =
-                        ["특이사항 없음"];
+                editObservations = editObservations.filter(
+                    item => item !== value
+                );
 
-                    updateEditSelections();
+            } else {
 
-                    return;
-                }
-
-                editObservations =
-                    editObservations.filter(
-                        item =>
-                            item !== "특이사항 없음"
-                    );
-
-                if (
-                    editObservations.includes(value)
-                ) {
-
-                    editObservations =
-                        editObservations.filter(
-                            item =>
-                                item !== value
-                        );
-
-                } else {
-
-                    editObservations.push(value);
-                }
-
-                updateEditSelections();
+                editObservations.push(value);
             }
-        );
+
+            updateEditSelections();
+        });
     });
 
+
+/* ========================================
+   발생 시점 선택
+======================================== */
 
 document
-    .querySelectorAll(
-        "#editAfterChoices .edit-choice-button"
-    )
+    .querySelectorAll("#editOccurrenceChoices .edit-choice-button")
     .forEach((button) => {
 
-        button.addEventListener(
-            "click",
-            () => {
+        button.addEventListener("click", () => {
 
-                const value =
-                    button.dataset.after;
+            const value = button.dataset.occurrence;
 
-                if (editAfter === value) {
+            if (editOccurrences.includes(value)) {
 
-                    editAfter = "";
+                editOccurrences = editOccurrences.filter(
+                    item => item !== value
+                );
 
-                } else {
+            } else {
 
-                    editAfter = value;
-                }
-
-                updateEditSelections();
+                editOccurrences.push(value);
             }
-        );
+
+            updateEditSelections();
+        });
     });
 
+
+/* ========================================
+   증상 후 상태 선택
+======================================== */
+
+document
+    .querySelectorAll("#editAfterChoices .edit-choice-button")
+    .forEach((button) => {
+
+        button.addEventListener("click", () => {
+
+            const value = button.dataset.after;
+
+            if (editAfters.includes(value)) {
+
+                editAfters = editAfters.filter(
+                    item => item !== value
+                );
+
+            } else {
+
+                editAfters.push(value);
+            }
+
+            updateEditSelections();
+        });
+    });
+
+
+/* ========================================
+   수정 버튼
+======================================== */
 
 document
     .getElementById("editRecordButton")
-    .addEventListener(
-        "click",
-        openEditMode
-    );
+    .addEventListener("click", openEditMode);
 
 
 /* ========================================
@@ -790,82 +729,69 @@ document
 
 document
     .getElementById("saveEditButton")
-    .addEventListener(
-        "click",
-        async () => {
+    .addEventListener("click", async () => {
 
-            if (
-                !selectedRecordId ||
-                !editType
-            ) {
+        if (!selectedRecordId || editTypes.length === 0) {
 
-                alert(
-                    "증상 유형을 선택해주세요."
-                );
+            alert("증상 유형을 하나 이상 선택해주세요.");
 
-                return;
-            }
+            return;
+        }
 
-            const saveButton =
-                document.getElementById(
-                    "saveEditButton"
-                );
+        const saveButton =
+            document.getElementById("saveEditButton");
 
-            saveButton.disabled = true;
-            saveButton.textContent =
-                "저장 중...";
+        saveButton.disabled = true;
+        saveButton.textContent = "저장 중...";
 
-            try {
+        try {
 
-                await updateDoc(
-                    doc(
-                        db,
-                        "seizures",
-                        selectedRecordId
-                    ),
-                    {
-                        type: editType,
+            await updateDoc(
+                doc(db, "seizures", selectedRecordId),
+                {
+                    type: editTypes,
+                    observations: editObservations,
+                    occurrence: editOccurrences,
+                    after: editAfters,
+                    memo: document
+                        .getElementById("editMemo")
+                        .value
+                        .trim()
+                }
+            );
 
-                        observations:
-                            editObservations,
+            // 저장된 값으로 상세 화면 데이터도 갱신
+            selectedRecordData = {
+                ...selectedRecordData,
+                type: editTypes,
+                observations: editObservations,
+                occurrence: editOccurrences,
+                after: editAfters,
+                memo: document
+                    .getElementById("editMemo")
+                    .value
+                    .trim()
+            };
 
-                        after:
-                            editAfter,
+            alert("기록이 수정되었습니다.");
 
-                        memo:
-                            document
-                                .getElementById(
-                                    "editMemo"
-                                )
-                                .value
-                                .trim()
-                    }
-                );
+            closeModal();
 
-                alert(
-                    "기록이 수정되었습니다."
-                );
+            await loadTodayRecords();
+            await loadLastRecord();
 
-                closeModal();
+        } catch (error) {
 
-                await loadTodayRecords();
-                await loadLastRecord();
+            console.error("기록 수정 실패:", error);
 
-            } catch (error) {
+            alert("기록 수정에 실패했습니다.");
 
-                console.error(error);
-
-                alert(
-                    "기록 수정에 실패했습니다."
-                );
-            }
+        } finally {
 
             saveButton.disabled = false;
-
-            saveButton.textContent =
-                "수정 저장";
+            saveButton.textContent = "수정 저장";
         }
-    );
+    });
 
 
 /* ========================================
@@ -874,23 +800,17 @@ document
 
 document
     .getElementById("cancelEditButton")
-    .addEventListener(
-        "click",
-        () => {
+    .addEventListener("click", () => {
 
-            document.getElementById(
-                "modalTitle"
-            ).textContent = "증상 기록";
+        document.getElementById("modalTitle").textContent =
+            "증상 기록";
 
-            document.getElementById(
-                "modalView"
-            ).style.display = "block";
+        document.getElementById("modalView").style.display =
+            "block";
 
-            document.getElementById(
-                "modalEdit"
-            ).style.display = "none";
-        }
-    );
+        document.getElementById("modalEdit").style.display =
+            "none";
+    });
 
 
 /* ========================================
@@ -910,20 +830,12 @@ function closeModal() {
 
 document
     .getElementById("closeModal")
-    .addEventListener(
-        "click",
-        closeModal
-    );
+    .addEventListener("click", closeModal);
 
 
 document
-    .querySelector(
-        ".record-modal-background"
-    )
-    .addEventListener(
-        "click",
-        closeModal
-    );
+    .querySelector(".record-modal-background")
+    .addEventListener("click", closeModal);
 
 
 /* ========================================
@@ -932,52 +844,40 @@ document
 
 document
     .getElementById("deleteRecordButton")
-    .addEventListener(
-        "click",
-        async () => {
+    .addEventListener("click", async () => {
 
-            if (!selectedRecordId) {
-                return;
-            }
-
-            const confirmed =
-                confirm(
-                    "이 기록을 삭제하시겠습니까?"
-                );
-
-            if (!confirmed) {
-                return;
-            }
-
-            try {
-
-                await deleteDoc(
-                    doc(
-                        db,
-                        "seizures",
-                        selectedRecordId
-                    )
-                );
-
-                closeModal();
-
-                await loadTodayRecords();
-                await loadLastRecord();
-
-                alert(
-                    "기록이 삭제되었습니다."
-                );
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert(
-                    "기록 삭제에 실패했습니다."
-                );
-            }
+        if (!selectedRecordId) {
+            return;
         }
-    );
+
+        const confirmed = confirm(
+            "이 기록을 삭제하시겠습니까?"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+
+            await deleteDoc(
+                doc(db, "seizures", selectedRecordId)
+            );
+
+            closeModal();
+
+            await loadTodayRecords();
+            await loadLastRecord();
+
+            alert("기록이 삭제되었습니다.");
+
+        } catch (error) {
+
+            console.error("기록 삭제 실패:", error);
+
+            alert("기록 삭제에 실패했습니다.");
+        }
+    });
 
 
 /* ========================================

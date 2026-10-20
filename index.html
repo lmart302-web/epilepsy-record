@@ -1,12 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>증상 기록</title>
 
@@ -84,28 +81,18 @@
 
 <div class="app">
 
-    <!-- 헤더 -->
     <header class="home-header">
-
         <div>
             <p class="home-label">오늘의 기록</p>
         </div>
 
-        <span
-            class="home-date"
-            id="todayDate"
-        >
-            9월 29일
-        </span>
-
+        <span class="home-date" id="todayDate">9월 29일</span>
     </header>
-
 
     <main>
 
         <!-- 오늘 현황 -->
         <section class="today-card">
-
             <div class="summary-grid">
 
                 <div class="summary-item">
@@ -124,90 +111,54 @@
                 </div>
 
             </div>
-
         </section>
-
 
         <!-- 증상 기록 -->
         <section class="record-start-section">
-
             <div class="record-actions">
 
-                <!-- 지금 바로 기록 -->
                 <button
                     type="button"
                     class="record-main-button"
                     onclick="location.href='record.html'"
                 >
-
-                    <span class="record-main-icon">
-                        +
-                    </span>
+                    <span class="record-main-icon">+</span>
 
                     <span class="record-main-text">
-
-                        <strong>
-                            증상 기록 시작
-                        </strong>
-
-                        <small>
-                            지금 증상이 시작되면
-                        </small>
-
+                        <strong>증상 기록 시작</strong>
+                        <small>지금 증상이 시작되면</small>
                     </span>
 
-                    <span class="record-main-arrow">
-                        →
-                    </span>
-
+                    <span class="record-main-arrow">→</span>
                 </button>
 
-
-                <!-- 지난 증상 수동 입력 -->
                 <button
                     type="button"
                     class="manual-record-button"
                     onclick="location.href='manual.html'"
                 >
-
-                    <span class="manual-record-icon">
-                        ✎
-                    </span>
+                    <span class="manual-record-icon">✎</span>
 
                     <span>
-
-                        <strong>
-                            지난 증상 수동 입력
-                        </strong>
-
-                        <small>
-                            놓친 기록을 직접 입력
-                        </small>
-
+                        <strong>지난 증상 수동 입력</strong>
+                        <small>놓친 기록을 직접 입력</small>
                     </span>
-
                 </button>
 
             </div>
-
         </section>
-
 
         <!-- 오후 수면 기록 -->
         <section class="today-card sleep-record-section">
-
             <div class="sleep-record-card">
 
-                <h2 class="sleep-record-title">
-                    오후 수면 기록
-                </h2>
+                <h2 class="sleep-record-title">오후 수면 기록</h2>
 
                 <p class="sleep-record-description">
                     오늘 점심 식사 후 수면했나요?
                 </p>
 
                 <div class="sleep-choice-grid">
-
                     <button
                         type="button"
                         class="sleep-choice-button"
@@ -223,60 +174,22 @@
                     >
                         수면하지 않음
                     </button>
-
                 </div>
 
-                <div
-                    class="sleep-status"
-                    id="sleepStatus"
-                >
+                <div class="sleep-status" id="sleepStatus">
                     아직 기록하지 않았습니다.
                 </div>
 
             </div>
-
         </section>
-
-
-        <!-- 안내 
-        <section class="notice">
-
-            <div class="notice-icon">
-                i
-            </div>
-
-            <div>
-
-                <strong>
-                    기록 방법
-                </strong>
-
-                <p>
-                    증상이 시작되면 기록을 시작하고,
-                    종료 후 관찰된 내용을 선택해 주세요.
-                    놓친 경우에는 수동으로 입력할 수 있습니다.
-                </p>
-
-            </div>
-
-        </section>-->
-
 
         <!-- 오늘의 증상 -->
         <section class="recent-section">
 
             <div class="section-header">
-
                 <div>
-
-                    <span class="section-label">
-                        기록 확인
-                    </span>
-
-                    <h2>
-                        오늘의 증상
-                    </h2>
-
+                    <span class="section-label">기록 확인</span>
+                    <h2>오늘의 증상</h2>
                 </div>
 
                 <button
@@ -286,50 +199,31 @@
                 >
                     리포트 →
                 </button>
-
             </div>
 
-
             <div id="lastRecord">
-
                 <div class="empty-state">
                     오늘 기록된 증상이 없습니다.
                 </div>
-
             </div>
 
         </section>
 
-
     </main>
-
 </div>
 
-
 <!-- 상세 / 수정 모달 -->
-<div
-    id="recordModal"
-    class="record-modal"
->
+<div id="recordModal" class="record-modal">
 
     <div class="record-modal-background"></div>
-
 
     <div class="record-modal-content">
 
         <!-- 모달 헤더 -->
         <div class="record-modal-header">
-
             <div>
-
-                <span class="modal-label">
-                    기록 상세
-                </span>
-
-                <h2 id="modalTitle">
-                    증상 기록
-                </h2>
-
+                <span class="modal-label">기록 상세</span>
+                <h2 id="modalTitle">증상 기록</h2>
             </div>
 
             <button
@@ -339,18 +233,14 @@
             >
                 ×
             </button>
-
         </div>
-
 
         <!-- 상세 보기 -->
         <div id="modalView">
 
             <div id="modalBody"></div>
 
-
             <div class="modal-actions">
-
                 <button
                     type="button"
                     id="editRecordButton"
@@ -366,187 +256,93 @@
                 >
                     기록 삭제
                 </button>
-
             </div>
 
         </div>
 
-
         <!-- 수정 -->
-        <div
-            id="modalEdit"
-            class="modal-edit"
-        >
+        <div id="modalEdit" class="modal-edit">
 
             <!-- 증상 유형 -->
             <div class="edit-section">
-
                 <h3>증상 유형</h3>
 
-                <div
-                    class="edit-choice-grid"
-                    id="editTypeChoices"
-                >
+                <div class="edit-choice-grid" id="editTypeChoices">
 
-                    <button
-                        type="button"
-                        class="edit-choice-button"
-                        data-type="전신 경련"
-                    >
-                        전신 경련
-                    </button>
-
-                    <button
-                        type="button"
-                        class="edit-choice-button"
-                        data-type="의식 소실"
-                    >
-                        의식 소실
-                    </button>
-
-                    <button
-                        type="button"
-                        class="edit-choice-button"
-                        data-type="멍함 / 반응 저하"
-                    >
-                        멍함 / 반응 저하
-                    </button>
-
-                    <button
-                        type="button"
-                        class="edit-choice-button"
-                        data-type="부분 경련"
-                    >
-                        부분 경련
-                    </button>
-
-                    <button
-                        type="button"
-                        class="edit-choice-button"
-                        data-type="기타"
-                    >
-                        기타
-                    </button>
+                    <button type="button" class="edit-choice-button" data-type="멍함 / 반응 저하">멍함 / 반응 저하</button>
+                    <button type="button" class="edit-choice-button" data-type="경직">경직</button>
+                    <button type="button" class="edit-choice-button" data-type="전신 경련">전신 경련</button>
+                    <button type="button" class="edit-choice-button" data-type="부분 경련">부분 경련</button>
+                    <button type="button" class="edit-choice-button" data-type="근육 움찔거림">근육 움찔거림</button>
+                    <button type="button" class="edit-choice-button" data-type="힘 빠짐">힘 빠짐</button>
+                    <button type="button" class="edit-choice-button" data-type="기타">기타</button>
 
                 </div>
-
             </div>
-
 
             <!-- 관찰 사항 -->
             <div class="edit-section">
-
                 <h3>관찰 사항</h3>
 
-                <div
-                    class="edit-choice-grid"
-                    id="editObservationChoices"
-                >
+                <div class="edit-choice-grid" id="editObservationChoices">
 
-                    <button
-                        type="button"
-                        class="edit-choice-button"
-                        data-observation="넘어짐"
-                    >
-                        넘어짐
-                    </button>
-
-                    <button
-                        type="button"
-                        class="edit-choice-button"
-                        data-observation="호흡 이상"
-                    >
-                        호흡 이상
-                    </button>
-
-                    <button
-                        type="button"
-                        class="edit-choice-button"
-                        data-observation="침 흘림"
-                    >
-                        침 흘림
-                    </button>
-
-                    <button
-                        type="button"
-                        class="edit-choice-button"
-                        data-observation="구토"
-                    >
-                        구토
-                    </button>
-
-                    <button
-                        type="button"
-                        class="edit-choice-button"
-                        data-observation="특이사항 없음"
-                    >
-                        특이사항 없음
-                    </button>
+                    <button type="button" class="edit-choice-button" data-observation="고개 떨굼">고개 떨굼</button>
+                    <button type="button" class="edit-choice-button" data-observation="갑작스런 발성">갑작스런 발성</button>
+                    <button type="button" class="edit-choice-button" data-observation="갑자기 주저앉음">갑자기 주저앉음</button>
+                    <button type="button" class="edit-choice-button" data-observation="팔다리 떨림">팔다리 떨림</button>
+                    <button type="button" class="edit-choice-button" data-observation="상체 처짐">상체 처짐</button>
+                    <button type="button" class="edit-choice-button" data-observation="호흡 변화">호흡 변화</button>
+                    <button type="button" class="edit-choice-button" data-observation="기타">기타</button>
 
                 </div>
-
             </div>
 
+            <!-- 발생 시점 -->
+            <div class="edit-section">
+                <h3>발생 시점</h3>
+
+                <div class="edit-choice-grid" id="editOccurrenceChoices">
+
+                    <button type="button" class="edit-choice-button" data-occurrence="섭취 중">섭취 중</button>
+                    <button type="button" class="edit-choice-button" data-occurrence="활동 요청 중">활동 요청 중</button>
+                    <button type="button" class="edit-choice-button" data-occurrence="서있는 중">서있는 중</button>
+                    <button type="button" class="edit-choice-button" data-occurrence="보행 중">보행 중</button>
+                    <button type="button" class="edit-choice-button" data-occurrence="휠체어 착석 활동 중">휠체어 착석 활동 중</button>
+                    <button type="button" class="edit-choice-button" data-occurrence="휠체어 이동 중">휠체어 이동 중</button>
+                    <button type="button" class="edit-choice-button" data-occurrence="위생활동 중">위생활동 중</button>
+                    <button type="button" class="edit-choice-button" data-occurrence="전환/대기 중">전환/대기 중</button>
+                    <button type="button" class="edit-choice-button" data-occurrence="외부활동 중">외부활동 중</button>
+                    <button type="button" class="edit-choice-button" data-occurrence="기타">기타</button>
+
+                </div>
+            </div>
 
             <!-- 증상 후 상태 -->
             <div class="edit-section">
-
                 <h3>증상 후 상태</h3>
 
-                <div
-                    class="edit-choice-grid"
-                    id="editAfterChoices"
-                >
+                <div class="edit-choice-grid" id="editAfterChoices">
 
-                    <button
-                        type="button"
-                        class="edit-choice-button"
-                        data-after="바로 회복"
-                    >
-                        바로 회복
-                    </button>
-
-                    <button
-                        type="button"
-                        class="edit-choice-button"
-                        data-after="졸림"
-                    >
-                        졸림
-                    </button>
-
-                    <button
-                        type="button"
-                        class="edit-choice-button"
-                        data-after="혼란"
-                    >
-                        혼란
-                    </button>
-
-                    <button
-                        type="button"
-                        class="edit-choice-button"
-                        data-after="평소와 다름"
-                    >
-                        평소와 다름
-                    </button>
+                    <button type="button" class="edit-choice-button" data-after="즉시 회복">즉시 회복</button>
+                    <button type="button" class="edit-choice-button" data-after="소리내어 웃음">소리내어 웃음</button>
+                    <button type="button" class="edit-choice-button" data-after="의미없는 말하기">의미없는 말하기</button>
+                    <button type="button" class="edit-choice-button" data-after="침흘림 증가">침흘림 증가</button>
+                    <button type="button" class="edit-choice-button" data-after="배뇨">배뇨</button>
+                    <button type="button" class="edit-choice-button" data-after="졸림">졸림</button>
+                    <button type="button" class="edit-choice-button" data-after="기타">기타</button>
 
                 </div>
-
             </div>
-
 
             <!-- 메모 -->
             <div class="edit-section">
-
                 <h3>메모</h3>
 
                 <textarea
                     id="editMemo"
                     placeholder="추가로 기록할 내용"
                 ></textarea>
-
             </div>
-
 
             <!-- 수정 버튼 -->
             <div class="edit-actions">
@@ -572,9 +368,7 @@
         </div>
 
     </div>
-
 </div>
-
 
 <script type="module" src="./js/index.js"></script>
 
