@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -16,11 +17,9 @@
 
 </head>
 
-
 <body>
 
 <div class="app">
-
 
     <header class="page-header">
 
@@ -31,7 +30,6 @@
         >
             ←
         </button>
-
 
         <div>
 
@@ -48,9 +46,7 @@
     </header>
 
 
-
     <main class="report-page">
-
 
         <!-- 월 선택 -->
 
@@ -63,11 +59,9 @@
                 ‹
             </button>
 
-
             <strong id="currentMonth">
                 2026년 9월
             </strong>
-
 
             <button
                 type="button"
@@ -79,7 +73,6 @@
         </section>
 
 
-
         <!-- 월간 요약 -->
 
         <section class="report-section">
@@ -87,7 +80,6 @@
             <h2>
                 월간 요약
             </h2>
-
 
             <div class="report-stats">
 
@@ -103,7 +95,6 @@
 
                 </div>
 
-
                 <div class="report-stat">
 
                     <span>
@@ -115,7 +106,6 @@
                     </strong>
 
                 </div>
-
 
                 <div class="report-stat">
 
@@ -134,7 +124,6 @@
         </section>
 
 
-
         <!-- 일별 발생 -->
 
         <section class="report-section">
@@ -151,7 +140,6 @@
         </section>
 
 
-
         <!-- 발생 시간 -->
 
         <section class="report-section">
@@ -163,7 +151,6 @@
             <div id="timeBars"></div>
 
         </section>
-
 
 
         <!-- 발생시점 -->
@@ -179,7 +166,6 @@
         </section>
 
 
-
         <!-- 오후 수면과 증상 -->
 
         <section class="report-section">
@@ -187,7 +173,6 @@
             <h2>
                 오후 수면과 증상
             </h2>
-
 
             <p
                 style="
@@ -200,11 +185,9 @@
                 수면 기록이 있는 날짜를 기준으로 13시 이후 발생한 증상을 비교합니다.
             </p>
 
-
             <div id="sleepComparison"></div>
 
         </section>
-
 
 
         <!-- 상세 기록 -->
@@ -230,7 +213,6 @@
 
             </button>
 
-
             <div class="detail-records-hidden">
 
                 <div id="detailRecords"></div>
@@ -240,17 +222,55 @@
         </section>
 
 
-    </main>
+        <!-- PDF 보고서 다운로드 -->
 
+        <section class="report-section">
+
+            <button
+                type="button"
+                id="downloadPdfReport"
+                style="
+                    width: 100%;
+                    padding: 16px;
+                    border: none;
+                    border-radius: 12px;
+                    background: #39845b;
+                    color: white;
+                    font-size: 15px;
+                    font-weight: 700;
+                    cursor: pointer;
+                "
+            >
+                ↓ 월간 PDF 보고서 다운로드
+            </button>
+
+            <p
+                style="
+                    margin: 10px 0 0;
+                    text-align: center;
+                    color: #888;
+                    font-size: 12px;
+                "
+            >
+                선택한 달의 증상 통계를 A4 가로형 1페이지로 저장합니다.
+            </p>
+
+        </section>
+
+    </main>
 
 </div>
 
+
+<!-- PDF 생성 라이브러리 -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script
     type="module"
     src="./js/report.js"
 ></script>
-
 
 </body>
 
