@@ -787,6 +787,7 @@ function updateSleepComparison(
    일별 발생
 ======================================== */
 
+
 function updateDailyRecords(records) {
 
     const container =
@@ -794,17 +795,14 @@ function updateDailyRecords(records) {
 
     container.innerHTML = "";
 
-    if (records.length === 0) {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
 
-        container.innerHTML = `
-            <div class="report-empty">
-                기록이 없습니다.
-            </div>
-        `;
-
-        return;
-    }
-
+    const lastDay = new Date(
+        year,
+        month + 1,
+        0
+    ).getDate();
 
     const dailyCounts = {};
 
@@ -823,37 +821,34 @@ function updateDailyRecords(records) {
 
     });
 
-
-    const dates = Object.keys(dailyCounts).sort();
-
     const maxCount = Math.max(
         ...Object.values(dailyCounts),
         1
     );
 
+    // 1일부터 말일까지 모든 날짜 표시
+    for (let day = 1; day <= lastDay; day++) {
 
-    dates.forEach(dateKey => {
+        const date = new Date(year, month, day);
+        const dateKey = getDateKey(date);
 
-        const [year, month, day] =
-            dateKey.split("-").map(Number);
-
-        const date = new Date(year, month - 1, day);
-
-        const count = dailyCounts[dateKey];
+        const count = dailyCounts[dateKey] || 0;
 
         const column = document.createElement("div");
 
         column.className = "daily-chart-column";
 
-        const barHeight = Math.max(
-            (count / maxCount) * 100,
-            4
-        );
+        const barHeight = count > 0
+            ? Math.max(
+                (count / maxCount) * 100,
+                4
+            )
+            : 0;
 
         column.innerHTML = `
 
             <div class="daily-chart-count">
-                ${count}회
+                ${count > 0 ? count + "회" : ""}
             </div>
 
             <div class="daily-chart-bar-wrap">
@@ -867,7 +862,7 @@ function updateDailyRecords(records) {
 
             <div class="daily-chart-label">
 
-                ${date.getMonth() + 1}/${date.getDate()}
+                ${month + 1}/${day}
                 <br>
                 ${["일", "월", "화", "수", "목", "금", "토"][date.getDay()]}
 
@@ -877,9 +872,10 @@ function updateDailyRecords(records) {
 
         container.appendChild(column);
 
-    });
+    }
 
 }
+
 
 
 /* ========================================
@@ -1195,10 +1191,7 @@ function createPdfReport(records, dailyRecords) {
             )
             : 0;
 
-        const showLabel =
-            item.day === 1 ||
-            item.day % 5 === 0 ||
-            item.day === dailyData.length;
+        const showLabel = true;
 
         return `
 
@@ -1815,10 +1808,6 @@ function createPdfReport(records, dailyRecords) {
 }
 
 
-/* ========================================
-   PDF 다운로드
-======================================== */
-
 
 /* ========================================
    PDF 다운로드
@@ -1987,7 +1976,7 @@ async function downloadPdfReport() {
         button.disabled = false;
 
         button.textContent =
-            "↓ 월간 PDF 보고서 다운로드";
+            "월간 PDF 보고서 다운로드";
 
     }
 
