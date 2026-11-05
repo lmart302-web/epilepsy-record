@@ -1211,8 +1211,13 @@ function createPdfReport(records, dailyRecords) {
                 </div>
 
                 <div class="pdf-day-label">
-                    ${showLabel ? item.day : ""}
-                </div>
+    <div>${item.day}</div>
+    <div class="pdf-day-week">
+        ${["일", "월", "화", "수", "목", "금", "토"][
+            new Date(year, month, item.day).getDay()
+        ]}
+    </div>
+</div>
 
             </div>
 
@@ -1519,11 +1524,20 @@ function createPdfReport(records, dailyRecords) {
             }
 
             .pdf-day-label {
-                height: 4mm;
-                padding-top: 1mm;
-                font-size: 7px;
-                color: #7b857d;
-            }
+    height: 8mm;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 1mm;
+    font-size: 7px;
+    line-height: 3mm;
+    color: #7b857d;
+    text-align: center;
+    white-space: nowrap;
+}
+
 
             .pdf-lower {
                 display: grid;
