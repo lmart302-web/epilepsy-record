@@ -1827,54 +1827,129 @@ function createPdfReport(records, dailyRecords) {
    PDF 다운로드
 ======================================== */
 
+/* ========================================
+   PDF 다운로드 - 브라우저 인쇄 방식
+======================================== */
+
 async function downloadPdfReport() {
 
     const button = document.getElementById(
         "downloadPdfReport"
     );
 
-    if (!window.html2canvas || !window.jspdf) {
-
-        alert(
-            "PDF 기능을 불러오지 못했습니다. 페이지를 새로고침해주세요."
-        );
-
-        return;
-    }
-
     button.disabled = true;
-    button.textContent = "PDF 생성 중...";
+    button.textContent = "인쇄 준비 중...";
 
     let report = null;
+    let printStyle = null;
+    let cleaned = false;
+
+    const cleanup = () => {
+
+        if (cleaned) return;
+
+        cleaned = true;
+
+        if (report && report.parentNode) {
+            report.remove();
+        }
+
+        if (printStyle && printStyle.parentNode) {
+            printStyle.remove();
+        }
+
+        button.disabled = false;
+
+        button.textContent =
+            "월간 PDF 보고서 다운로드";
+
+    };
 
     try {
 
         const records = currentMonthRecords;
         const dailyRecords = currentMonthDailyRecords;
 
-        const year = currentDate.getFullYear();
-        const month = currentDate.getMonth();
+        if (!records || !dailyRecords) {
+            throw new Error(
+                "월간 기록을 불러오지 못했습니다."
+            );
+        }
+
+        /* 기존 PDF 보고서 HTML 생성 */
 
         report = createPdfReport(
             records,
             dailyRecords
         );
 
-        /* PDF 영역 크기 직접 지정 */
+        report.classList.add("pdf-print-target");
 
-        report.style.position = "absolute";
-        report.style.left = "0";
+        report.style.position = "fixed";
+        report.style.left = "-10000px";
         report.style.top = "0";
         report.style.width = "277mm";
         report.style.height = "190mm";
         report.style.minHeight = "190mm";
         report.style.boxSizing = "border-box";
-        report.style.display = "grid";
-        report.style.visibility = "visible";
-        report.style.opacity = "1";
-        report.style.background = "#ffffff";
 
         document.body.appendChild(report);
+
+
+        /* 인쇄 전용 CSS */
+
+        printStyle = document.createElement("style");
+
+        printStyle.textContent = `
+
+    @page {
+        size: A4 landscape;
+        margin: 10mm;
+    }
+
+    @media print {
+
+        html,
+        body {
+            width: 277mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: #ffffff !important;
+        }
+
+        body > *:not(.pdf-print-target) {
+            display: none !important;
+        }
+
+        .pdf-print-target {
+            display: grid !important;
+            position: relative !important;
+            left: auto !important;
+            top: auto !important;
+
+            width: 277mm !important;
+            height: 190mm !important;
+            min-height: 190mm !important;
+
+            margin: 0 !important;
+            box-sizing: border-box !important;
+            overflow: hidden !important;
+
+            break-inside: avoid !important;
+            page-break-inside: avoid !important;
+        }
+
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+    }
+
+`;
+
+        document.head.appendChild(printStyle);
+
 
         /* 브라우저 렌더링 대기 */
 
@@ -1888,106 +1963,33 @@ async function downloadPdfReport() {
             await document.fonts.ready;
         }
 
-        /* 실제 크기 확인 */
 
-        const width = report.offsetWidth;
-        const height = report.offsetHeight;
+        /* 인쇄 창 닫힌 후 정리 */
 
-        console.log("PDF 영역 너비:", width);
-        console.log("PDF 영역 높이:", height);
-
-        if (width === 0 || height === 0) {
-            throw new Error(
-                "PDF 보고서 영역의 실제 크기가 0입니다."
-            );
-        }
-
-        /* HTML을 캔버스로 직접 변환 */
-
-        const canvas = await window.html2canvas(report, {
-
-            scale: 3,
-
-            width: width,
-            height: height,
-
-            windowWidth: width,
-            windowHeight: height,
-
-            useCORS: true,
-
-            backgroundColor: "#ffffff",
-
-            logging: true,
-
-            scrollX: 0,
-            scrollY: 0
-
-        });
-
-        console.log("캔버스 너비:", canvas.width);
-        console.log("캔버스 높이:", canvas.height);
-
-        if (canvas.width === 0 || canvas.height === 0) {
-            throw new Error(
-                "PDF 캔버스 생성에 실패했습니다."
-            );
-        }
-
-        /* 캔버스를 이미지로 변환 */
-
-        const imageData = canvas.toDataURL("image/png");
-
-        /* A4 가로형 PDF 생성 */
-
-        const { jsPDF } = window.jspdf;
-
-        const pdf = new jsPDF({
-            orientation: "landscape",
-            unit: "mm",
-            format: "a4",
-            compress: true
-        });
-
-        /* A4 가로 297mm × 210mm
-           여백 10mm, 보고서 277mm × 190mm */
-
-        pdf.addImage(
-            imageData,
-            "JPEG",
-            10,
-            10,
-            277,
-            190
+        window.addEventListener(
+            "afterprint",
+            cleanup,
+            { once: true }
         );
 
-        /* PDF 저장 */
 
-        pdf.save(
-            `${year}년_${month + 1}월_증상리포트.pdf`
-        );
+        /* 인쇄 창 실행 */
+
+        window.print();
+
 
     } catch (error) {
 
         console.error(
-            "PDF 보고서 생성 실패:",
+            "PDF 보고서 출력 실패:",
             error
         );
 
+        cleanup();
+
         alert(
-            "PDF 보고서 생성 실패: " + error.message
+            "PDF 보고서 출력 실패: " + error.message
         );
-
-    } finally {
-
-        if (report && report.parentNode) {
-            report.remove();
-        }
-
-        button.disabled = false;
-
-        button.textContent =
-            "월간 PDF 보고서 다운로드";
 
     }
 
