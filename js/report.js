@@ -1892,7 +1892,7 @@ async function downloadPdfReport() {
 
         const canvas = await window.html2canvas(report, {
 
-            scale: 2,
+            scale: 3,
 
             width: width,
             height: height,
@@ -1922,10 +1922,7 @@ async function downloadPdfReport() {
 
         /* 캔버스를 이미지로 변환 */
 
-        const imageData = canvas.toDataURL(
-            "image/jpeg",
-            0.98
-        );
+        const imageData = canvas.toDataURL("image/png");
 
         /* A4 가로형 PDF 생성 */
 
